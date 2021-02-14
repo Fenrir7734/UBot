@@ -1,11 +1,17 @@
 package com.fenrir.ubot.commands.owner;
 
 import com.fenrir.ubot.commands.Command;
+import com.fenrir.ubot.commands.CommandCategory;
 import com.fenrir.ubot.commands.CommandEvent;
 import com.fenrir.ubot.config.Config;
 import com.fenrir.ubot.util.BasicMessages;
 
 public class Activation extends Command {
+
+    public Activation() {
+        category = CommandCategory.OWNER;
+    }
+
     @Override
     public void execute(CommandEvent event) {
         String message;

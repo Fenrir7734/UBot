@@ -1,14 +1,11 @@
 package com.fenrir.ubot.commands;
 
-import com.fenrir.ubot.util.BasicMessages;
-import net.dv8tion.jda.api.entities.Invite;
+import com.fenrir.ubot.util.Embed;
 import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-
-import java.nio.channels.Channel;
-
 
 public abstract class Command {
+
+    protected CommandCategory category;
 
     public abstract void execute(CommandEvent event);
 
@@ -20,5 +17,11 @@ public abstract class Command {
 
     protected void sendBasicMessageToTextChannel(String message, MessageChannel channel) {
         channel.sendMessage(message).queue();
+    }
+
+    protected void sendHelpMessageToTextChannel(MessageChannel channel) {
+        channel.sendMessage(Embed
+                        .commandHelpFormatting(getCommand(), getBriefDescription(), getSpecificDescription()))
+                .queue();
     }
 }

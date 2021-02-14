@@ -1,12 +1,9 @@
 package com.fenrir.ubot.config;
 
-
-import com.fenrir.ubot.UBot;
 import org.json.JSONObject;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
 
 public class Config {
 
@@ -23,7 +20,7 @@ public class Config {
     public Config() {
         path = "Config.json";
         config = this;
-        active = false;
+        active = true;
         botName = "U-BOT";
         load();
     }
@@ -65,7 +62,7 @@ public class Config {
             prefix = object.getString("prefix");
 
         } catch (Exception e) {
-
+            System.out.println(e.getMessage()); //TODO: Coś z tym zrobić i dodać Logger
         }
     }
 

@@ -1,12 +1,8 @@
 package com.fenrir.ubot.listener;
 
-import com.fenrir.ubot.commands.Command;
 import com.fenrir.ubot.commands.CommandEvent;
 import com.fenrir.ubot.commands.CommandList;
 import com.fenrir.ubot.config.Config;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.events.Event;
-import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;

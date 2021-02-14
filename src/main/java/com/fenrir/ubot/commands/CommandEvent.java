@@ -7,7 +7,6 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Arrays;
 
-
 public class CommandEvent {
 
     private final String prefix = Config.getConfig().getPrefix();

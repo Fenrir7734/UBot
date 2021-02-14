@@ -1,12 +1,13 @@
-/**
- * TODO: Nazwa bota w Config może być niezgona z jest Nickname na serwerze
- *
- */
+/*
+  TODO: Nazwa bota w Config może być niezgona z jest Nickname na serwerze
+  TODO: Dodać Logger
+*/
 
 package com.fenrir.ubot;
 
 import com.fenrir.ubot.commands.CommandList;
 import com.fenrir.ubot.commands.general.Dice;
+import com.fenrir.ubot.commands.general.Help;
 import com.fenrir.ubot.commands.general.Ping;
 import com.fenrir.ubot.commands.owner.Activation;
 import com.fenrir.ubot.commands.owner.BotName;
@@ -40,9 +41,9 @@ public class UBot {
             client.awaitReady();
             Config.getConfig().setBotName(client.getSelfUser().getName());
         } catch (LoginException e) {
-
+            System.out.println(e.getMessage()); //TODO: Zrobić coś z tym, najlepiej dodać logger
         } catch (InterruptedException e) {
-
+            System.out.println(e.getMessage());
         }
 
     }
@@ -56,6 +57,7 @@ public class UBot {
         );
 
         CommandList.getCommandList().addCommands(
+                new Help(),
                 new Dice()
         );
     }

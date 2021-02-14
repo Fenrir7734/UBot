@@ -1,16 +1,17 @@
 package com.fenrir.ubot.commands.owner;
 
-import com.fenrir.ubot.UBot;
 import com.fenrir.ubot.commands.Command;
+import com.fenrir.ubot.commands.CommandCategory;
 import com.fenrir.ubot.commands.CommandEvent;
 import com.fenrir.ubot.config.Config;
 import com.fenrir.ubot.util.BasicMessages;
-import net.dv8tion.jda.api.exceptions.ErrorResponseException;
-
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class BotName extends Command {
+
+    public BotName() {
+        category = CommandCategory.OWNER;
+    }
+
     @Override
     public void execute(CommandEvent event) {
 
