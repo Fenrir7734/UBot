@@ -11,14 +11,14 @@ public class Deactivation extends Command {
         String message;
 
         if(!event.isOwner()) {
-            message = BasicMessages.ONLY_OWNER.name();
+            message = BasicMessages.ONLY_OWNER.getValue();
         } else if(!Config.getConfig().isActive()) {
             message = Config.getConfig().getBotName() + " has already been deactivated!";
         } else {
             Config.getConfig().setActive(false);
             message = Config.getConfig().getBotName() + "has been deactivated!";
         }
-        sendBasicMessageToTextChannel(message, event.getEvent().getChannel());
+        sendBasicMessageToTextChannel(message, event.getChannel());
     }
 
     @Override

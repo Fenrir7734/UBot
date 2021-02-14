@@ -18,19 +18,6 @@ public abstract class Command {
 
     public abstract String getSpecificDescription();
 
-    protected int checkNumberOfArguments(String[] args, int minArgumentNumber, boolean canBeMore) {
-
-        if(args.length < minArgumentNumber) {
-            return -1;
-        }
-
-        if(args.length > minArgumentNumber && !canBeMore) {
-            return 1;
-        }
-
-        return 0;
-    }
-
     protected void sendBasicMessageToTextChannel(String message, MessageChannel channel) {
         channel.sendMessage(message).queue();
     }

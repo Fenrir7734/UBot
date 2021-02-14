@@ -11,7 +11,7 @@ public class Ping extends Command {
 
     @Override
     public void execute(CommandEvent event) {
-        MessageChannel channel = event.getEvent().getChannel();
+        MessageChannel channel = event.getChannel();
 
         long currentTime = System.currentTimeMillis();
 

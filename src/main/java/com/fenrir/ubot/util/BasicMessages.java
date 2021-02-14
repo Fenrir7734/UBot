@@ -8,11 +8,13 @@ public enum BasicMessages {
     TOO_FEW_ARGUMENTS("Too few arguments!"),
     TOO_MUCH_ARGUMENTS("Too much arguments!");
 
+    String value;
 
-    String message;
-
-    BasicMessages(String message) {
-        this.message = message;
+    BasicMessages(String value) {
+        this.value = value;
     }
 
+    public String getValue() {
+        return value;
+    }
 }

@@ -11,14 +11,14 @@ public class Activation extends Command {
         String message;
 
         if(!event.isOwner()) {
-            message = BasicMessages.ONLY_OWNER.name();
+            message = BasicMessages.ONLY_OWNER.getValue();
         } else if(Config.getConfig().isActive()) {
             message = Config.getConfig().getBotName() + " has already been activated!";
         } else {
             Config.getConfig().setActive(true);
-            message = Config.getConfig().getBotName() + "has been activated!";
+            message = Config.getConfig().getBotName() + " has been activated!";
         }
-        sendBasicMessageToTextChannel(message, event.getEvent().getChannel());
+        sendBasicMessageToTextChannel(message, event.getChannel());
     }
 
     @Override

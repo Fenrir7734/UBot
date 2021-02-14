@@ -5,6 +5,7 @@ import com.fenrir.ubot.commands.Command;
 import com.fenrir.ubot.commands.CommandEvent;
 import com.fenrir.ubot.config.Config;
 import com.fenrir.ubot.util.BasicMessages;
+import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -14,21 +15,37 @@ public class BotName extends Command {
     public void execute(CommandEvent event) {
 
         if(!event.isOwner()) {
-            sendBasicMessageToTextChannel(BasicMessages.ONLY_OWNER.name(), event.getEvent().getChannel());
+            sendBasicMessageToTextChannel(BasicMessages.ONLY_OWNER.getValue(), event.getChannel());
             return;
         }
 
-        if(event.getArgs().length < 1) {
+        String message;
 
-        } else {
-            String botId = event.getEvent().getJDA().getSelfUser().getId();
-            event.getEvent().getJDA()
-                    .getGuildById(event.getEvent().getGuild().getId())
-                    .getMemberById(botId)
-                    .modifyNickname(String.join(" ", event.getArgs()))
-                    .queue();
-            sendBasicMessageToTextChannel("Bot renamed!", event.getEvent().getChannel());
+        if((message = event.checkNumberOfArguments(event.getArgs(), 1, false, true)) == null) {
+            try {
+                String botId = event.getEvent().getJDA().getSelfUser().getId();
+                String newName = String.join(" ", event.getArgs());
+
+                if(newName.length() <= 32) {
+                    event.getEvent().getJDA()
+                            .getGuildById(event.getEvent().getGuild().getId())
+                            .getMemberById(botId)
+                            .modifyNickname(newName)
+                            .queue();
+                    Config.getConfig().setBotName(newName);
+
+                    message = "Bot renamed!";
+                } else {
+                    message = "Nick name must be 32 or fewer in length.";
+                }
+            } catch (NullPointerException e) {
+                message = "Error: renaming failed. " +
+                        " Cannot find or rename a user with the given name. " +
+                        " Check the log for more details.";
+            }
         }
+
+        sendBasicMessageToTextChannel(message, event.getChannel());
     }
 
     @Override

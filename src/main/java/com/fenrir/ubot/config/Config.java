@@ -44,6 +44,10 @@ public class Config {
         return botName;
     }
 
+    public void setBotName(String botName) {
+        this.botName = botName;
+    }
+
     public boolean isActive() {
         return active;
     }
