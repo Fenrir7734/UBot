@@ -1,16 +1,18 @@
 package com.fenrir.ubot.util;
 
-public enum BasicMessages {
+public enum CommandErrorsMsg {
 
     ONLY_OWNER("Only the owner can execute this command"),
-    INACTIVE("bot is deactivated "),
+    INACTIVE("Bot is deactivated"),
 
     TOO_FEW_ARGUMENTS("Too few arguments!"),
-    TOO_MUCH_ARGUMENTS("Too much arguments!");
+    TOO_MUCH_ARGUMENTS("Too much arguments!"),
+    INVALID_ARGUMENTS("Invalid argument!"),
+    INVALID_FLAG("Invalid flag");
 
     String value;
 
-    BasicMessages(String value) {
+    CommandErrorsMsg(String value) {
         this.value = value;
     }
 

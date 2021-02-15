@@ -4,27 +4,36 @@ import com.fenrir.ubot.commands.Command;
 import com.fenrir.ubot.commands.CommandCategory;
 import com.fenrir.ubot.commands.CommandEvent;
 import com.fenrir.ubot.config.Config;
-import com.fenrir.ubot.util.BasicMessages;
+import com.fenrir.ubot.util.CommandErrorsMsg;
 
 public class Deactivation extends Command {
 
     public Deactivation() {
+        super();
         category = CommandCategory.OWNER;
+        minNumberOfArguments = 0;
+        maxNumberOfArguments = 1;
     }
 
     @Override
     public void execute(CommandEvent event) {
-        String message;
+
+        if(!isCommandCorrect(event) || isHelpFlag(event)) {
+            return;
+        }
 
         if(!event.isOwner()) {
-            message = BasicMessages.ONLY_OWNER.getValue();
-        } else if(!Config.getConfig().isActive()) {
-            message = Config.getConfig().getBotName() + " has already been deactivated!";
-        } else {
-            Config.getConfig().setActive(false);
-            message = Config.getConfig().getBotName() + "has been deactivated!";
+            sendBasicMessageToTextChannel(CommandErrorsMsg.ONLY_OWNER, event.getChannel());
+            return;
         }
-        sendBasicMessageToTextChannel(message, event.getChannel());
+
+        if(!Config.getConfig().isActive()) {
+            sendBasicMessageToTextChannel(Config.getConfig().getBotName() + " has already been deactivated!", event.getChannel());
+            return;
+        }
+
+        Config.getConfig().setActive(false);
+        sendBasicMessageToTextChannel(Config.getConfig().getBotName() + "has been deactivated!", event.getChannel());
     }
 
     @Override

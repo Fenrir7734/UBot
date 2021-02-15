@@ -1,7 +1,7 @@
 package com.fenrir.ubot.commands;
 
 import com.fenrir.ubot.config.Config;
-import com.fenrir.ubot.util.BasicMessages;
+import com.fenrir.ubot.util.CommandErrorsMsg;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -67,18 +67,59 @@ public class CommandEvent {
         return event.getMessage().getAuthor().getId().equals(event.getGuild().getOwnerId());
     }
 
-    public String checkNumberOfArguments(String[] args, int minArgumentNumber, boolean canBeLess, boolean canBeMore) {
+    private CommandErrorsMsg checkNumberOfArguments(int minNumberOfArguments, int maxNumberOfArguments) {
 
-        if(args.length < minArgumentNumber && !canBeLess) {
-            return BasicMessages.TOO_FEW_ARGUMENTS.getValue();
+        if(args.length < minNumberOfArguments) {
+            return CommandErrorsMsg.TOO_FEW_ARGUMENTS;
         }
 
-        if(args.length > minArgumentNumber && !canBeMore) {
-            return BasicMessages.TOO_MUCH_ARGUMENTS.getValue();
+        if(args.length > maxNumberOfArguments) {
+            return CommandErrorsMsg.TOO_MUCH_ARGUMENTS;
         }
 
         return null;
     }
 
+    private boolean checkFlags(String arg, String[] flags) {
+        return Arrays.asList(flags).contains(arg);
+    }
+
+    /* It is only temporary
+    public CommandErrorsMsg checkCommand(int minNumberOfArguments, int maxNumberOfArguments, String[] flags) {
+        if(args.length > 0) {
+            if(args[0].startsWith("-")) {
+                if(checkFlags(args[0], flags) && args.length == 1) {
+                    return null;
+                } else {
+                    if(args.length != 1) {
+                        return CommandErrorsMsg.TOO_MUCH_ARGUMENTS;
+                    } else {
+                        return CommandErrorsMsg.INVALID_FLAG;
+                    }
+                }
+            }
+        }
+        return checkNumberOfArguments(minNumberOfArguments, maxNumberOfArguments);
+    }
+    */
+
+    public CommandErrorsMsg checkCommand(int minNumberOfArguments, int maxNumberOfArguments, String[] flags) {
+
+        if(args.length == 0) {
+            return checkNumberOfArguments(minNumberOfArguments, maxNumberOfArguments);
+        }
+
+        boolean isFlag = args[0].startsWith("-");
+
+        if(isFlag && !checkFlags(args[0], flags)) {
+            return CommandErrorsMsg.INVALID_FLAG;
+        }
+
+        if(isFlag && args.length > 1) {
+            return CommandErrorsMsg.TOO_MUCH_ARGUMENTS;
+        }
+
+        return isFlag ? null : checkNumberOfArguments(minNumberOfArguments, maxNumberOfArguments);
+    }
 
 }

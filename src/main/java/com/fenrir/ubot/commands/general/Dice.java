@@ -3,6 +3,7 @@ package com.fenrir.ubot.commands.general;
 import com.fenrir.ubot.commands.Command;
 import com.fenrir.ubot.commands.CommandCategory;
 import com.fenrir.ubot.commands.CommandEvent;
+import com.fenrir.ubot.util.CommandErrorsMsg;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,21 +12,15 @@ import java.util.Random;
 public class Dice extends Command {
 
     public Dice() {
+        super();
         category = CommandCategory.GENERAL;
+        maxNumberOfArguments = 1;
     }
 
     @Override
     public void execute(CommandEvent event) {
 
-        if(event.getArgs().length != 0 && event.getArgs()[0].equals("--help")) {
-            sendHelpMessageToTextChannel(event.getChannel());
-            return;
-        }
-
-        String message;
-
-        if((message = event.checkNumberOfArguments(event.getArgs(), 1, true, false)) != null) {
-            sendBasicMessageToTextChannel(message, event.getChannel());
+        if(!isCommandCorrect(event) || isHelpFlag(event)) {
             return;
         }
 
@@ -38,7 +33,7 @@ public class Dice extends Command {
 
             sendBasicMessageToTextChannel("You rolled " + getRandom(seq), event.getChannel());
         } catch (NullPointerException e) {
-            sendBasicMessageToTextChannel("Inncorect argument.", event.getChannel());
+            sendBasicMessageToTextChannel(CommandErrorsMsg.INVALID_ARGUMENTS, event.getChannel());
         }
     }
 
@@ -104,6 +99,7 @@ public class Dice extends Command {
         return " The command takes either 0 or 1 argument. " +
                 "If no argument is given, the command randomizes from ranges `[1-6]`. " +
                 "By giving an argument you can define the scope yourself. " +
+                "The argument can only contain numbers and letters of the Latin alphabet.\n" +
                 "The argument can take two forms:\n" +
                 "`{a, b, c, d}` will randomize one of the given letters\n" +
                 "`[a-d]` will randomize one letter from the given range\n";

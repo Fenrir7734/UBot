@@ -1,5 +1,6 @@
 package com.fenrir.ubot.commands;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CommandList {
@@ -8,10 +9,12 @@ public class CommandList {
 
     private HashMap<String, Command> allCommands;
     private HashMap<String, Command> initCommands;
+    private HashMap<CommandCategory, ArrayList<Command>> commandsByCategory;
 
     private CommandList() {
         allCommands = new HashMap<>();
         initCommands = new HashMap<>();
+        commandsByCategory = new HashMap<>();
     }
 
     public static CommandList getCommandList() {
@@ -24,6 +27,7 @@ public class CommandList {
     public void addCommands(Command... commands) {
         for (Command value : commands) {
             allCommands.put(value.getCommand(), value);
+            commandsByCategory.computeIfAbsent(value.getCategory(), k -> new ArrayList<>()).add(value);
         }
     }
 
@@ -44,4 +48,7 @@ public class CommandList {
         return initCommands.get(command);
     }
 
+    public HashMap<CommandCategory, ArrayList<Command>> getCommandsByCategory() {
+        return commandsByCategory;
+    }
 }

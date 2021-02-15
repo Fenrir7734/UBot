@@ -4,27 +4,34 @@ import com.fenrir.ubot.commands.Command;
 import com.fenrir.ubot.commands.CommandCategory;
 import com.fenrir.ubot.commands.CommandEvent;
 import com.fenrir.ubot.config.Config;
-import com.fenrir.ubot.util.BasicMessages;
+import com.fenrir.ubot.util.CommandErrorsMsg;
 
 public class Activation extends Command {
 
     public Activation() {
+        super();
         category = CommandCategory.OWNER;
     }
 
     @Override
     public void execute(CommandEvent event) {
-        String message;
+
+        if(!isCommandCorrect(event) || isHelpFlag(event)) {
+            return;
+        }
 
         if(!event.isOwner()) {
-            message = BasicMessages.ONLY_OWNER.getValue();
-        } else if(Config.getConfig().isActive()) {
-            message = Config.getConfig().getBotName() + " has already been activated!";
-        } else {
-            Config.getConfig().setActive(true);
-            message = Config.getConfig().getBotName() + " has been activated!";
+            sendBasicMessageToTextChannel(CommandErrorsMsg.ONLY_OWNER, event.getChannel());
+            return;
         }
-        sendBasicMessageToTextChannel(message, event.getChannel());
+
+        if(Config.getConfig().isActive()) {
+            sendBasicMessageToTextChannel(Config.getConfig().getBotName() + " has already been activated!", event.getChannel());
+            return;
+        }
+
+        Config.getConfig().setActive(true);
+        sendBasicMessageToTextChannel(Config.getConfig().getBotName() + " has been activated!", event.getChannel());
     }
 
     @Override
