@@ -28,7 +28,7 @@ public class CommandEvent {
         String[] arr = Arrays.stream(event.getMessage().getContentRaw()
                     .replaceFirst(prefix, "")
                     .strip()
-                    .split(" (?![^{]*})"))    //arguments are split by " ". It ignores what is between brackets.
+                    .split(" (?![^{]*})"))    //arguments are split by " ". Contents of brackets is ignored.
                 .map(String::trim)
                 .toArray(String[]::new);
 
