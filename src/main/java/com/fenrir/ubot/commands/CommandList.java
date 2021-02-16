@@ -7,9 +7,9 @@ public class CommandList {
 
     private static CommandList commandList = null;
 
-    private HashMap<String, Command> allCommands;
-    private HashMap<String, Command> initCommands;
-    private HashMap<CommandCategory, ArrayList<Command>> commandsByCategory;
+    private final HashMap<String, Command> allCommands;
+    private final HashMap<String, Command> initCommands;
+    private final HashMap<CommandCategory, ArrayList<Command>> commandsByCategory;
 
     private CommandList() {
         allCommands = new HashMap<>();
@@ -18,7 +18,7 @@ public class CommandList {
     }
 
     public static CommandList getCommandList() {
-        if(commandList == null) {
+        if (commandList == null) {
             commandList = new CommandList();
         }
         return commandList;
@@ -39,12 +39,10 @@ public class CommandList {
     }
 
     public Command search(String command) {
-        command = command.toLowerCase().strip();
         return allCommands.get(command);
     }
 
     public Command searchInit(String command) {
-        command = command.toLowerCase().strip();
         return initCommands.get(command);
     }
 

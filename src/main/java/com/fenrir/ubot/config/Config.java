@@ -2,6 +2,7 @@ package com.fenrir.ubot.config;
 
 import org.json.JSONObject;
 
+import java.awt.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -17,12 +18,33 @@ public class Config {
     private boolean active;
     private String botName;
 
+    private Color messageColor;
+    private Color infoColor;
+    private Color warningColor;
+    private Color errorColor;
+    private Color helpColor;
+
     public Config() {
         path = "Config.json";
         config = this;
         active = true;
         botName = "U-BOT";
+
+        messageColor = Color.CYAN;
+        infoColor = Color.BLUE;
+        warningColor = Color.YELLOW;
+        errorColor = Color.RED;
+        helpColor = Color.GREEN;
+
         load();
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public void setBotName(String botName) {
+        this.botName = botName;
     }
 
     public static Config getConfig() {
@@ -41,16 +63,28 @@ public class Config {
         return botName;
     }
 
-    public void setBotName(String botName) {
-        this.botName = botName;
+    public Color getMessageColor() {
+        return messageColor;
+    }
+
+    public Color getInfoColor() {
+        return infoColor;
+    }
+
+    public Color getWarningColor() {
+        return warningColor;
+    }
+
+    public Color getErrorColor() {
+        return errorColor;
+    }
+
+    public Color getHelpColor() {
+        return helpColor;
     }
 
     public boolean isActive() {
         return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     private void load() {

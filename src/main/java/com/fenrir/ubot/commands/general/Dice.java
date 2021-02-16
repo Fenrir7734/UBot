@@ -3,10 +3,12 @@ package com.fenrir.ubot.commands.general;
 import com.fenrir.ubot.commands.Command;
 import com.fenrir.ubot.commands.CommandCategory;
 import com.fenrir.ubot.commands.CommandEvent;
-import com.fenrir.ubot.util.CommandErrorsMsg;
+import com.fenrir.ubot.utilities.*;
+import net.dv8tion.jda.api.Permission;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
 
 public class Dice extends Command {
@@ -14,26 +16,29 @@ public class Dice extends Command {
     public Dice() {
         super();
         category = CommandCategory.GENERAL;
+        botRequiredPermissions = Collections.singletonList(Permission.MESSAGE_WRITE);
         maxNumberOfArguments = 1;
     }
 
     @Override
     public void execute(CommandEvent event) {
 
-        if(!isCommandCorrect(event) || isHelpFlag(event)) {
+        if (!CommandVerifier.isCommandCorrect(event, minNumberOfArguments, maxNumberOfArguments, flags)
+                || !PermissionsVerifier.checkPermissions(botRequiredPermissions, event)
+                || isHelpFlag(event)) {
             return;
         }
 
         String[] seq = {"1", "2", "3", "4", "5", "6"};
 
         try {
-            if(event.getArgs().length == 1) {
+            if (event.getArgs().length == 1) {
                 seq = getSings(event.getArgs()[0]);
             }
 
-            sendBasicMessageToTextChannel("You rolled " + getRandom(seq), event.getChannel());
+            Messages.sendBasicTextMessage("You rolled " + getRandom(seq), event.getChannel());
         } catch (NullPointerException e) {
-            sendBasicMessageToTextChannel(CommandErrorsMsg.INVALID_ARGUMENTS, event.getChannel());
+            Messages.sendBasicEmbedMessage(CommandErrorsMsg.INVALID_ARGUMENTS, MessageCategory.ERROR, event.getChannel());
         }
     }
 
@@ -41,18 +46,18 @@ public class Dice extends Command {
         arg = arg.trim();
         String[] signs = null;
 
-        if(arg.startsWith("[") && arg.endsWith("]") && arg.charAt(2) == '-' && arg.length() == 5) {
+        if (arg.startsWith("[") && arg.endsWith("]") && arg.charAt(2) == '-' && arg.length() == 5) {
             int start = arg.charAt(1);
             int end = arg.charAt(arg.length() - 2);
 
-            if(Character.isLetterOrDigit(start) && Character.isLetterOrDigit(end)) {
+            if (Character.isLetterOrDigit(start) && Character.isLetterOrDigit(end)) {
                 signs = generateASCII(start, end);
             }
-        } else if(arg.startsWith("{") && arg.endsWith("}")) {
+        } else if (arg.startsWith("{") && arg.endsWith("}")) {
             arg = arg.replace("}", "")
                     .replace("{", "");
 
-            if(!arg.isBlank()) {
+            if (!arg.isBlank()) {
                 signs = Arrays.stream(arg.split("[,;.]"))
                         .map(String::trim)
                         .toArray(String[]::new);
@@ -63,7 +68,7 @@ public class Dice extends Command {
     }
 
     private static String[] generateASCII(int star, int end) {
-        if(star > end) {
+        if (star > end) {
             int tmp = star;
             star = end;
             end = tmp;
@@ -71,8 +76,8 @@ public class Dice extends Command {
 
         ArrayList<String> sings = new ArrayList<>();
 
-        while(star <= end) {
-            if(Character.isLetterOrDigit((char) star)) {
+        while (star <= end) {
+            if (Character.isLetterOrDigit((char) star)) {
                 sings.add(String.valueOf((char) star));
             }
             star++;

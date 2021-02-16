@@ -3,6 +3,8 @@ package com.fenrir.ubot.listener;
 import com.fenrir.ubot.commands.CommandEvent;
 import com.fenrir.ubot.commands.CommandList;
 import com.fenrir.ubot.config.Config;
+import com.fenrir.ubot.utilities.MessageCategory;
+import com.fenrir.ubot.utilities.Messages;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -15,33 +17,33 @@ public class CommandListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
 
-        if(event.getAuthor().isBot()) {
+        if (event.getAuthor().isBot()) {
             return;
         }
 
-        if(!event.getMessage().getContentRaw().startsWith(prefix)) {
+        if (!event.getMessage().getContentRaw().startsWith(prefix)) {
             return;
         }
 
-        if(event.getMessage().getContentRaw().length() <= 1) {
-            event.getChannel()
-                    .sendMessage("You have to specify the command. To check list of commands type !help")
-                    .queue();
+        if (event.getMessage().getContentRaw().length() <= 1) {
+            Messages.sendBasicEmbedMessage("You have to specify the command. To check list of commands type !help",
+                    MessageCategory.WARNING,
+                    event.getChannel());
             return;
         }
 
         CommandEvent commandEvent = new CommandEvent(event);
 
         try {
-            if(Config.getConfig().isActive()) {
+            if (Config.getConfig().isActive()) {
                 commandList.search(commandEvent.getCommand()).execute(commandEvent);
             } else {
                 commandList.searchInit(commandEvent.getCommand()).execute(commandEvent);
             }
         } catch (NullPointerException e) {
-            event.getChannel()
-                    .sendMessage("I can't find this command. To check list of commands type !help")
-                    .queue();
+            Messages.sendBasicEmbedMessage("I can't find this command. To check list of commands type !help",
+                    MessageCategory.ERROR,
+                    event.getChannel());
         }
 
     }

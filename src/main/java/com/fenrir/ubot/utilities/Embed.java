@@ -1,4 +1,4 @@
-package com.fenrir.ubot.util;
+package com.fenrir.ubot.utilities;
 
 import com.fenrir.ubot.commands.Command;
 import com.fenrir.ubot.commands.CommandCategory;
@@ -14,33 +14,20 @@ public class Embed {
 
     public static MessageEmbed commandHelpFormatting(String command, String briefDescription, String specificDescription) {
         return new EmbedBuilder().setTitle("`" + Config.getConfig().getPrefix() + command + "`")
-                .setColor(Color.BLACK)
+                .setColor(Config.getConfig().getHelpColor())
                 .addField("Description", briefDescription, false)
                 .addField("Specific Description", specificDescription, true)
                 .build();
     }
-    
+
     public static MessageEmbed basicHelpFormatting(HashMap<CommandCategory, ArrayList<Command>> commands) {
         EmbedBuilder eb = new EmbedBuilder();
-        eb.setTitle("**Help**");
+        eb.setTitle("**Help**")
+                .setColor(Config.getConfig().getHelpColor());
 
-        for(CommandCategory category: commands.keySet()) {
-            eb.addField(category.getValue(), "", false);
-            for(Command command: commands.get(category)) {
-                eb.addField("`" + command.getCommand() + "`", command.getBriefDescription(), true);
-            }
-        }
-        
-        return eb.build();
-    }
-
-    public static MessageEmbed basicHelpFormatting2(HashMap<CommandCategory, ArrayList<Command>> commands) {
-        EmbedBuilder eb = new EmbedBuilder();
-        eb.setTitle("**Help**");
-
-        for(CommandCategory category: commands.keySet()) {
+        for (CommandCategory category : commands.keySet()) {
             StringBuilder stringBuilder = new StringBuilder();
-            for(Command command: commands.get(category)) {
+            for (Command command : commands.get(category)) {
                 stringBuilder.append("`").append(Config.getConfig().getPrefix()).append(command.getCommand()).append("` ").append(command.getBriefDescription()).append("\n");
             }
             eb.addField(category.getValue(), stringBuilder.toString(), false);
@@ -51,17 +38,40 @@ public class Embed {
 
     public static MessageEmbed listHelpFormatting(HashMap<CommandCategory, ArrayList<Command>> commands) {
         EmbedBuilder eb = new EmbedBuilder();
-        eb.setTitle("**Command List**");
+        eb.setTitle("**Command List**")
+                .setColor(Config.getConfig().getHelpColor());
 
-        for(CommandCategory category: commands.keySet()) {
+        for (CommandCategory category : commands.keySet()) {
             StringBuilder stringBuilder = new StringBuilder();
-            for(Command command: commands.get(category)) {
+            for (Command command : commands.get(category)) {
                 stringBuilder.append("`").append(Config.getConfig().getPrefix()).append(command.getCommand()).append("` ");
             }
             eb.addField(category.getValue(), stringBuilder.toString(), false);
         }
 
         return eb.build();
+    }
+
+    public static MessageEmbed basicMessage(String title, String message, MessageCategory category) {
+        return new EmbedBuilder()
+                .setColor(validateMessageColor(category))
+                .addField(title, message, false)
+                .build();
+    }
+
+    public static MessageEmbed basicMessage(String message, MessageCategory category) {
+        return basicMessage(category.getValue(), message, category);
+    }
+
+    private static Color validateMessageColor(MessageCategory category) {
+        Color color = Config.getConfig().getMessageColor();
+        switch (category) {
+            case MESSAGE: color = Config.getConfig().getMessageColor(); break;
+            case INFO: color = Config.getConfig().getInfoColor(); break;
+            case WARNING: color = Config.getConfig().getWarningColor(); break;
+            case ERROR: color = Config.getConfig().getErrorColor(); break;
+        }
+        return color;
     }
 
 }

@@ -3,20 +3,26 @@ package com.fenrir.ubot.commands.general;
 import com.fenrir.ubot.commands.Command;
 import com.fenrir.ubot.commands.CommandCategory;
 import com.fenrir.ubot.commands.CommandEvent;
-import com.fenrir.ubot.util.CommandErrorsMsg;
-import net.dv8tion.jda.api.entities.MessageChannel;
+import com.fenrir.ubot.utilities.CommandVerifier;
+import com.fenrir.ubot.utilities.PermissionsVerifier;
+import net.dv8tion.jda.api.Permission;
+
+import java.util.Collections;
 
 public class Ping extends Command {
 
     public Ping() {
         super();
         category = CommandCategory.GENERAL;
+        botRequiredPermissions = Collections.singletonList(Permission.MESSAGE_WRITE);
     }
 
     @Override
     public void execute(CommandEvent event) {
 
-        if(!isCommandCorrect(event) || isHelpFlag(event)) {
+        if (!CommandVerifier.isCommandCorrect(event, minNumberOfArguments, maxNumberOfArguments, flags)
+                || !PermissionsVerifier.checkPermissions(botRequiredPermissions, event)
+                || isHelpFlag(event)) {
             return;
         }
 

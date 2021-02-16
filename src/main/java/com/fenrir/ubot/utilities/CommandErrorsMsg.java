@@ -1,4 +1,6 @@
-package com.fenrir.ubot.util;
+package com.fenrir.ubot.utilities;
+
+import com.fenrir.ubot.config.Config;
 
 public enum CommandErrorsMsg {
 
@@ -8,7 +10,11 @@ public enum CommandErrorsMsg {
     TOO_FEW_ARGUMENTS("Too few arguments!"),
     TOO_MUCH_ARGUMENTS("Too much arguments!"),
     INVALID_ARGUMENTS("Invalid argument!"),
-    INVALID_FLAG("Invalid flag");
+    INVALID_FLAG("Invalid flag"),
+
+    USER_TOO_LOW_PERMISSION("You do not have the required permissions"),
+
+    BOT_TOO_LOW_PERMISSION(Config.getConfig().getBotName() + " does not have the required permissions");
 
     String value;
 

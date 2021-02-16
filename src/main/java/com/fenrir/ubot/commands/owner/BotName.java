@@ -4,13 +4,17 @@ import com.fenrir.ubot.commands.Command;
 import com.fenrir.ubot.commands.CommandCategory;
 import com.fenrir.ubot.commands.CommandEvent;
 import com.fenrir.ubot.config.Config;
-import com.fenrir.ubot.util.CommandErrorsMsg;
+import com.fenrir.ubot.utilities.*;
+import net.dv8tion.jda.api.Permission;
+
+import java.util.Collections;
 
 public class BotName extends Command {
 
     public BotName() {
         super();
         category = CommandCategory.OWNER;
+        botRequiredPermissions = Collections.singletonList(Permission.MESSAGE_WRITE);
         minNumberOfArguments = 1;
         maxNumberOfArguments = 5;
     }
@@ -18,14 +22,14 @@ public class BotName extends Command {
     @Override
     public void execute(CommandEvent event) {
 
-        if(!isCommandCorrect(event) || isHelpFlag(event)) {
+        if (!CommandVerifier.isCommandCorrect(event, minNumberOfArguments, maxNumberOfArguments, flags)
+                || !PermissionsVerifier.checkPermissions(botRequiredPermissions, event)
+                || isHelpFlag(event)) {
             return;
         }
 
-        String message;
-
-        if(!event.isOwner()) {
-            sendBasicMessageToTextChannel(CommandErrorsMsg.ONLY_OWNER, event.getChannel());
+        if (!event.isOwner()) {
+            Messages.sendBasicTextMessage(CommandErrorsMsg.ONLY_OWNER, event.getChannel());
             return;
         }
 
@@ -33,7 +37,7 @@ public class BotName extends Command {
             String botId = event.getEvent().getJDA().getSelfUser().getId();
             String newName = String.join(" ", event.getArgs());
 
-            if(newName.length() <= 32) {
+            if (newName.length() <= 32) {
                 event.getEvent().getJDA()
                         .getGuildById(event.getEvent().getGuild().getId())
                         .getMemberById(botId)
@@ -41,17 +45,16 @@ public class BotName extends Command {
                         .queue();
                 Config.getConfig().setBotName(newName);
 
-                message = "Bot renamed!";
+                Messages.sendBasicEmbedMessage("Bot renamed!", MessageCategory.INFO, event.getChannel());
             } else {
-                message = "Nick name must be 32 or fewer in length.";
+                Messages.sendBasicEmbedMessage("Nick name must be 32 or fewer in length.", MessageCategory.ERROR, event.getChannel());
             }
         } catch (NullPointerException e) {
-            message = "Error: renaming failed. " +
+            String message = "Error: renaming failed. " +
                     " Cannot find or rename a user with the given name. " +
                     " Check the log for more details.";
+            Messages.sendBasicEmbedMessage(message, MessageCategory.ERROR, event.getChannel());
         }
-
-        sendBasicMessageToTextChannel(message, event.getChannel());
     }
 
     @Override

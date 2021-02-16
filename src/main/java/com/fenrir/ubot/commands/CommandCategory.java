@@ -3,7 +3,7 @@ package com.fenrir.ubot.commands;
 public enum CommandCategory {
 
     OWNER("Owner"),
-    SETTINGS("Settings"),
+    MODERATION("Settings"),
     FUN("Fun"),
     MEDIA("Media"),
     GENERAL("General");

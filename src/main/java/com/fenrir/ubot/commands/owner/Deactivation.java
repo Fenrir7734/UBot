@@ -4,13 +4,17 @@ import com.fenrir.ubot.commands.Command;
 import com.fenrir.ubot.commands.CommandCategory;
 import com.fenrir.ubot.commands.CommandEvent;
 import com.fenrir.ubot.config.Config;
-import com.fenrir.ubot.util.CommandErrorsMsg;
+import com.fenrir.ubot.utilities.*;
+import net.dv8tion.jda.api.Permission;
+
+import java.util.Collections;
 
 public class Deactivation extends Command {
 
     public Deactivation() {
         super();
         category = CommandCategory.OWNER;
+        botRequiredPermissions = Collections.singletonList(Permission.MESSAGE_WRITE);
         minNumberOfArguments = 0;
         maxNumberOfArguments = 1;
     }
@@ -18,22 +22,24 @@ public class Deactivation extends Command {
     @Override
     public void execute(CommandEvent event) {
 
-        if(!isCommandCorrect(event) || isHelpFlag(event)) {
+        if (!CommandVerifier.isCommandCorrect(event, minNumberOfArguments, maxNumberOfArguments, flags)
+                || !PermissionsVerifier.checkPermissions(botRequiredPermissions, event)
+                || isHelpFlag(event)) {
             return;
         }
 
-        if(!event.isOwner()) {
-            sendBasicMessageToTextChannel(CommandErrorsMsg.ONLY_OWNER, event.getChannel());
+        if (!event.isOwner()) {
+            Messages.sendBasicEmbedMessage(CommandErrorsMsg.ONLY_OWNER, MessageCategory.ERROR, event.getChannel());
             return;
         }
 
-        if(!Config.getConfig().isActive()) {
-            sendBasicMessageToTextChannel(Config.getConfig().getBotName() + " has already been deactivated!", event.getChannel());
+        if (!Config.getConfig().isActive()) {
+            Messages.sendBasicEmbedMessage(Config.getConfig().getBotName() + " has already been deactivated!", MessageCategory.WARNING, event.getChannel());
             return;
         }
 
         Config.getConfig().setActive(false);
-        sendBasicMessageToTextChannel(Config.getConfig().getBotName() + "has been deactivated!", event.getChannel());
+        Messages.sendBasicEmbedMessage(Config.getConfig().getBotName() + "has been deactivated!", MessageCategory.INFO, event.getChannel());
     }
 
     @Override

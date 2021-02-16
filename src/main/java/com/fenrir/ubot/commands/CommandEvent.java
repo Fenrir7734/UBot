@@ -1,11 +1,14 @@
 package com.fenrir.ubot.commands;
 
 import com.fenrir.ubot.config.Config;
-import com.fenrir.ubot.util.CommandErrorsMsg;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Arrays;
+import java.util.EnumSet;
 
 public class CommandEvent {
 
@@ -26,9 +29,9 @@ public class CommandEvent {
     private void prepareMessage() {
 
         String[] arr = Arrays.stream(event.getMessage().getContentRaw()
-                    .replaceFirst(prefix, "")
-                    .strip()
-                    .split(" (?![^{]*})"))    //arguments are split by " ". It ignores what is between brackets.
+                .replaceFirst(prefix, "")
+                .strip()
+                .split(" (?![^{]*})"))    //arguments are split by " ". It ignores what is between brackets.
                 .map(String::trim)
                 .toArray(String[]::new);
 
@@ -51,6 +54,22 @@ public class CommandEvent {
         return AuthorId;
     }
 
+    public Member getAuthorAsMember() {
+        return event.getMember();
+    }
+
+    public Member getBotAsMember() {
+        return event.getGuild().getSelfMember();
+    }
+
+    public EnumSet<Permission> getAuthorPermission() throws NullPointerException {
+        return event.getMember().getPermissions();
+    }
+
+    public EnumSet<Permission> getBotPermission() {
+        return event.getGuild().getSelfMember().getPermissions();
+    }
+
     public String getCommand() {
         return command;
     }
@@ -65,61 +84,6 @@ public class CommandEvent {
 
     public boolean isOwner() {
         return event.getMessage().getAuthor().getId().equals(event.getGuild().getOwnerId());
-    }
-
-    private CommandErrorsMsg checkNumberOfArguments(int minNumberOfArguments, int maxNumberOfArguments) {
-
-        if(args.length < minNumberOfArguments) {
-            return CommandErrorsMsg.TOO_FEW_ARGUMENTS;
-        }
-
-        if(args.length > maxNumberOfArguments) {
-            return CommandErrorsMsg.TOO_MUCH_ARGUMENTS;
-        }
-
-        return null;
-    }
-
-    private boolean checkFlags(String arg, String[] flags) {
-        return Arrays.asList(flags).contains(arg);
-    }
-
-    /* It is only temporary
-    public CommandErrorsMsg checkCommand(int minNumberOfArguments, int maxNumberOfArguments, String[] flags) {
-        if(args.length > 0) {
-            if(args[0].startsWith("-")) {
-                if(checkFlags(args[0], flags) && args.length == 1) {
-                    return null;
-                } else {
-                    if(args.length != 1) {
-                        return CommandErrorsMsg.TOO_MUCH_ARGUMENTS;
-                    } else {
-                        return CommandErrorsMsg.INVALID_FLAG;
-                    }
-                }
-            }
-        }
-        return checkNumberOfArguments(minNumberOfArguments, maxNumberOfArguments);
-    }
-    */
-
-    public CommandErrorsMsg checkCommand(int minNumberOfArguments, int maxNumberOfArguments, String[] flags) {
-
-        if(args.length == 0) {
-            return checkNumberOfArguments(minNumberOfArguments, maxNumberOfArguments);
-        }
-
-        boolean isFlag = args[0].startsWith("-");
-
-        if(isFlag && !checkFlags(args[0], flags)) {
-            return CommandErrorsMsg.INVALID_FLAG;
-        }
-
-        if(isFlag && args.length > 1) {
-            return CommandErrorsMsg.TOO_MUCH_ARGUMENTS;
-        }
-
-        return isFlag ? null : checkNumberOfArguments(minNumberOfArguments, maxNumberOfArguments);
     }
 
 }
