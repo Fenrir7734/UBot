@@ -5,6 +5,7 @@ import com.fenrir.ubot.commands.CommandList;
 import com.fenrir.ubot.config.Config;
 import com.fenrir.ubot.utilities.MessageCategory;
 import com.fenrir.ubot.utilities.Messages;
+import com.fenrir.ubot.utilities.PermissionsVerifier;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -25,10 +26,14 @@ public class CommandListener extends ListenerAdapter {
             return;
         }
 
+        boolean hasSendingPermission = PermissionsVerifier.canBotSendMessages(event.getGuild().getSelfMember(), event.getChannel());
+
         if (event.getMessage().getContentRaw().length() <= 1) {
-            Messages.sendBasicEmbedMessage("You have to specify the command. To check list of commands type !help",
-                    MessageCategory.WARNING,
-                    event.getChannel());
+            if(hasSendingPermission) {
+                Messages.sendBasicEmbedMessage("You have to specify the command. To check list of commands type !help",
+                        MessageCategory.WARNING,
+                        event.getChannel());
+            }
             return;
         }
 
@@ -41,9 +46,11 @@ public class CommandListener extends ListenerAdapter {
                 commandList.searchInit(commandEvent.getCommand()).execute(commandEvent);
             }
         } catch (NullPointerException e) {
-            Messages.sendBasicEmbedMessage("I can't find this command. To check list of commands type !help",
-                    MessageCategory.ERROR,
-                    event.getChannel());
+            if(hasSendingPermission) {
+                Messages.sendBasicEmbedMessage("I can't find this command. To check list of commands type !help",
+                        MessageCategory.ERROR,
+                        event.getChannel());
+            }
         }
 
     }

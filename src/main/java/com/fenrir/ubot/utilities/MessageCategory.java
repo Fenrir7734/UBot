@@ -6,7 +6,7 @@ public enum MessageCategory {
     INFO("Info"),
     WARNING("Warning"),
     ERROR("Error"),
-    NONE("None");
+    NONE("");
 
     String value;
 

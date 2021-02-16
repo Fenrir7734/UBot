@@ -3,6 +3,7 @@ package com.fenrir.ubot.utilities;
 import com.fenrir.ubot.commands.CommandEvent;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.Collection;
@@ -21,12 +22,19 @@ public class PermissionsVerifier {
 
         return checkBotPermission(botRequiredPermissions, event);
     }
-
-    private static boolean canBotSendMessages(CommandEvent event) {
+    //Czy tutaj też powinienem sprawdzać czy MessageChannel jest instancją TextChannel?
+    public static boolean canBotSendMessages(CommandEvent event) {
         Member member = event.getBotAsMember();
         TextChannel channel = (TextChannel) event.getChannel();
 
         return member.hasPermission(channel, Permission.MESSAGE_WRITE);
+    }
+
+    public static boolean canBotSendMessages(Member member, MessageChannel channel) {
+        if(channel instanceof TextChannel) {
+            return member.hasPermission((TextChannel) channel, Permission.MESSAGE_WRITE);
+        }
+        return false;
     }
 
         //someday that may be expanded
