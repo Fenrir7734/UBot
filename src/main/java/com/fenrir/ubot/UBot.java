@@ -6,7 +6,7 @@
 package com.fenrir.ubot;
 
 import com.fenrir.ubot.commands.CommandList;
-import com.fenrir.ubot.commands.general.Dice;
+import com.fenrir.ubot.commands.general.Roll;
 import com.fenrir.ubot.commands.general.Help;
 import com.fenrir.ubot.commands.general.Ping;
 import com.fenrir.ubot.commands.owner.Activation;
@@ -58,7 +58,7 @@ public class UBot {
 
         CommandList.getCommandList().addCommands(
                 new Help(),
-                new Dice()
+                new Roll()
         );
     }
 

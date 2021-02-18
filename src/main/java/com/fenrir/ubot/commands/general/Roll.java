@@ -11,9 +11,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Random;
 
-public class Dice extends Command {
+public class Roll extends Command {
 
-    public Dice() {
+    public Roll() {
         super();
         category = CommandCategory.GENERAL;
         botRequiredPermissions = Collections.singletonList(Permission.MESSAGE_WRITE);
@@ -101,7 +101,7 @@ public class Dice extends Command {
 
     @Override
     public String getSpecificDescription() {
-        return " The command takes either 0 or 1 argument. " +
+        return  "The command takes either 0 or 1 argument. " +
                 "If no argument is given, the command randomizes from ranges `[1-6]`. " +
                 "By giving an argument you can define the scope yourself. " +
                 "The argument can only contain numbers and letters of the Latin alphabet.\n" +

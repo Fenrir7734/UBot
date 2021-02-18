@@ -41,7 +41,7 @@ public class PermissionsVerifier {
     private static boolean isFromGuild(CommandEvent event) {
         return event.getEvent().isFromGuild();
     }
-
+    //Trzeba tu sprawdzać czy channel jest TextChannel czy mozę Private Channel
     public static boolean checkBotPermission(Collection<Permission> requiredPermissions, CommandEvent event) {
         Member member = event.getBotAsMember();
         TextChannel channel = (TextChannel) event.getChannel();

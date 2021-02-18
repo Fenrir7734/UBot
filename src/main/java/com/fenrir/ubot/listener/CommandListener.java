@@ -15,6 +15,7 @@ public class CommandListener extends ListenerAdapter {
     private final String prefix = Config.getConfig().getPrefix();
     private final CommandList commandList = CommandList.getCommandList();
 
+    //Może przydało by sie to zmienić na onGuildMessageReceived
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
 

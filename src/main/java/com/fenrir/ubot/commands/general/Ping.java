@@ -41,7 +41,7 @@ public class Ping extends Command {
 
     @Override
     public String getBriefDescription() {
-        return "Checks if the bot is active";
+        return "Checks if the bot is available";
     }
 
     @Override
