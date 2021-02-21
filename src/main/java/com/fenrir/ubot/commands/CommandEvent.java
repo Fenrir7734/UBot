@@ -2,10 +2,9 @@ package com.fenrir.ubot.commands;
 
 import com.fenrir.ubot.config.Config;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -58,6 +57,10 @@ public class CommandEvent {
         return event.getMember();
     }
 
+    public User getAuthorAsUser() {
+        return event.getAuthor();
+    }
+
     public Member getBotAsMember() {
         return event.getGuild().getSelfMember();
     }
@@ -80,6 +83,21 @@ public class CommandEvent {
 
     public MessageChannel getChannel() {
         return channel;
+    }
+
+    public TextChannel getFirstTextChannel() {
+        if(!event.isFromType(ChannelType.PRIVATE)) {
+            for(TextChannel channel: event.getGuild().getTextChannels()) {
+                if(channel.canTalk()) {
+                    return channel;
+                }
+            }
+        }
+        return null;
+    }
+
+    public boolean hasAuthorPrivateChannel() {
+        return getAuthorAsUser().hasPrivateChannel();
     }
 
     public boolean isOwner() {

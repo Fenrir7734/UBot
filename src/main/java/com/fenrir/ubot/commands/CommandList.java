@@ -1,5 +1,13 @@
 package com.fenrir.ubot.commands;
 
+import com.fenrir.ubot.commands.administration.Activation;
+import com.fenrir.ubot.commands.administration.BotName;
+import com.fenrir.ubot.commands.administration.Deactivation;
+import com.fenrir.ubot.commands.general.Help;
+import com.fenrir.ubot.commands.general.Ping;
+import com.fenrir.ubot.commands.general.Roll;
+import com.fenrir.ubot.commands.moderation.Purge;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,10 +19,16 @@ public class CommandList {
     private final HashMap<String, Command> initCommands;
     private final HashMap<CommandCategory, ArrayList<Command>> commandsByCategory;
 
+    public final static HashMap<String, Command> allBotCommands = new HashMap<>();
+
     private CommandList() {
         allCommands = new HashMap<>();
         initCommands = new HashMap<>();
         commandsByCategory = new HashMap<>();
+
+        addInitCommands(
+
+        );
     }
 
     public static CommandList getCommandList() {
@@ -48,5 +62,11 @@ public class CommandList {
 
     public HashMap<CommandCategory, ArrayList<Command>> getCommandsByCategory() {
         return commandsByCategory;
+    }
+
+    public static void addCommand(Command... commands) {
+        for(Command command: commands) {
+            allBotCommands.put(command.getCommand(), command);
+        }
     }
 }

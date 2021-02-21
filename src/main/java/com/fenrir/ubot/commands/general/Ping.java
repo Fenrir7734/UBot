@@ -14,7 +14,7 @@ public class Ping extends Command {
     public Ping() {
         super();
         category = CommandCategory.GENERAL;
-        botRequiredPermissions = Collections.singletonList(Permission.MESSAGE_WRITE);
+        isOnlyGuild = false;
     }
 
     @Override

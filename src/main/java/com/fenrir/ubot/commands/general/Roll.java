@@ -16,13 +16,12 @@ public class Roll extends Command {
     public Roll() {
         super();
         category = CommandCategory.GENERAL;
-        botRequiredPermissions = Collections.singletonList(Permission.MESSAGE_WRITE);
         maxNumberOfArguments = 1;
+        isOnlyGuild = false;
     }
 
     @Override
     public void execute(CommandEvent event) {
-
         if (!CommandVerifier.isCommandCorrect(event, minNumberOfArguments, maxNumberOfArguments, flags)
                 || !PermissionsVerifier.checkPermissions(botRequiredPermissions, event)
                 || isHelpFlag(event)) {

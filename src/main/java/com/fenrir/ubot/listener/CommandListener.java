@@ -7,30 +7,40 @@ import com.fenrir.ubot.config.GuildSettings;
 import com.fenrir.ubot.utilities.MessageCategory;
 import com.fenrir.ubot.utilities.Messages;
 import com.fenrir.ubot.utilities.PermissionsVerifier;
-import net.dv8tion.jda.api.entities.GuildChannel;
-import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
-import java.nio.channels.Channel;
-
 public class CommandListener extends ListenerAdapter {
 
-    private final String prefix = Config.getConfig().getPrefix();
     private final CommandList commandList = CommandList.getCommandList();
 
     //Może przydało by sie to zmienić na onGuildMessageReceived
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+        if (event.isFromType(ChannelType.PRIVATE)) {
+            return;
+        }
 
         if (event.getAuthor().isBot()) {
             return;
         }
+
+        String prefix;
+        GuildSettings guildSettings = GuildSettings.getSettings(event.getGuild());
+
+        if (guildSettings == null) {
+            guildSettings = new GuildSettings(event.getGuild());
+            GuildSettings.addGuildSettings(guildSettings);
+        }
+        prefix = guildSettings.getPrefix();
 
         if (!event.getMessage().getContentRaw().startsWith(prefix)) {
             return;
@@ -62,17 +72,6 @@ public class CommandListener extends ListenerAdapter {
                         event.getChannel());
             }
         }
-    }
 
-    @Override
-    public void onGuildReady(@NotNull GuildReadyEvent event) {
-        new GuildSettings(event.getGuild());
-        Member self = event.getGuild().getSelfMember();
-
-        for (GuildChannel channel: event.getGuild().getChannels()) {
-            if(channel instanceof TextChannel && ((TextChannel) channel).canTalk(self)) {
-                Messages.sendBasicEmbedMessage("Welcome!", MessageCategory.INFO, (TextChannel) channel);
-            }
-        }
     }
 }

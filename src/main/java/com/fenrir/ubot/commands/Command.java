@@ -3,6 +3,7 @@ package com.fenrir.ubot.commands;
 import com.fenrir.ubot.utilities.Messages;
 import net.dv8tion.jda.api.Permission;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 public abstract class Command {
@@ -16,11 +17,15 @@ public abstract class Command {
     protected int maxNumberOfArguments;
     protected String[] flags;
 
+    protected boolean isOnlyGuild;
+
     public Command() {
         userRequiredPermissions = null;
+        botRequiredPermissions = Arrays.asList(Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS);
         minNumberOfArguments = 0;
         maxNumberOfArguments = 0;
         flags = new String[]{"-h"};
+        isOnlyGuild = true;
     }
 
     public abstract void execute(CommandEvent event);
@@ -43,4 +48,7 @@ public abstract class Command {
         return false;
     }
 
+    public boolean isOnlyGuild() {
+        return isOnlyGuild;
+    }
 }

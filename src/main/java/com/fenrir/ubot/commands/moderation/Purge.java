@@ -14,7 +14,7 @@ public class Purge extends Command {
         super();
         category = CommandCategory.MODERATION;
         userRequiredPermissions = Collections.singletonList(Permission.MESSAGE_MANAGE);
-        botRequiredPermissions = Arrays.asList(Permission.MESSAGE_MANAGE, Permission.MESSAGE_WRITE, Permission.MESSAGE_READ);
+        botRequiredPermissions = Arrays.asList(Permission.MESSAGE_MANAGE, Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS, Permission.MESSAGE_READ);
         minNumberOfArguments = 1;
         maxNumberOfArguments = 1;
     }

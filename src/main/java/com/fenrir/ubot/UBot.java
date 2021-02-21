@@ -14,6 +14,8 @@ import com.fenrir.ubot.commands.administration.BotName;
 import com.fenrir.ubot.commands.administration.Deactivation;
 import com.fenrir.ubot.config.Config;
 import com.fenrir.ubot.listener.CommandListener;
+import com.fenrir.ubot.listener.GuildReadyListener;
+import com.fenrir.ubot.listener.PrivateChannelListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import org.apache.logging.log4j.core.Logger;
@@ -36,7 +38,11 @@ public class UBot {
     public static void bootBot() {
         try {
             client = JDABuilder.createDefault(config.getToken())
-                    .addEventListeners(new CommandListener())
+                    .addEventListeners(
+                            new CommandListener(),
+                            new GuildReadyListener(),
+                            new PrivateChannelListener()
+                    )
                     .build();
             client.awaitReady();
             Config.getConfig().setBotName(client.getSelfUser().getName());

@@ -2,29 +2,28 @@ package com.fenrir.ubot.utilities;
 
 import com.fenrir.ubot.commands.CommandEvent;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.PrivateChannel;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.*;
 
 import java.util.Collection;
 
 public class PermissionsVerifier {
 
     public static boolean checkPermissions(Collection<Permission> userRequiredPermissions, Collection<Permission> botRequiredPermissions, CommandEvent event) {
+        if(event.getEvent().isFromType(ChannelType.PRIVATE)) {
+            return false;
+        }
         return checkPermissions(botRequiredPermissions, event) && checkUserPermission(userRequiredPermissions, event);
     }
 
     public static boolean checkPermissions(Collection<Permission> botRequiredPermissions, CommandEvent event) {
+        return event.getEvent().isFromType(ChannelType.PRIVATE) || checkBotPermission(botRequiredPermissions, event);
+    }
 
-        if(!isFromGuild(event)) {
-            return false;
+    public static boolean canBotSendMessages(CommandEvent event) {
+        if(event.getEvent().isFromType(ChannelType.PRIVATE)) {
+            return true;
         }
 
-        return checkBotPermission(botRequiredPermissions, event);
-    }
-    //Czy tutaj też powinienem sprawdzać czy MessageChannel jest instancją TextChannel?
-    public static boolean canBotSendMessages(CommandEvent event) {
         Member member = event.getBotAsMember();
         TextChannel channel = (TextChannel) event.getChannel();
 
@@ -35,17 +34,9 @@ public class PermissionsVerifier {
         if(channel instanceof TextChannel) {
             return member.hasPermission((TextChannel) channel, Permission.MESSAGE_WRITE);
         }
-        if(channel instanceof PrivateChannel) {
-            return member.hasPermission(Permission.MESSAGE_WRITE);
-        }
-        return false;
+        return channel instanceof PrivateChannel;
     }
 
-        //someday that may be expanded
-    private static boolean isFromGuild(CommandEvent event) {
-        return event.getEvent().isFromGuild();
-    }
-    //Trzeba tu sprawdzać czy channel jest TextChannel czy mozę Private Channel
     public static boolean checkBotPermission(Collection<Permission> requiredPermissions, CommandEvent event) {
         Member member = event.getBotAsMember();
         TextChannel channel = (TextChannel) event.getChannel();

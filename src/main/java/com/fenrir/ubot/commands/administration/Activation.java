@@ -14,7 +14,6 @@ public class Activation extends Command {
     public Activation() {
         super();
         category = CommandCategory.OWNER;
-        botRequiredPermissions = Collections.singletonList(Permission.MESSAGE_WRITE);
     }
 
     @Override

@@ -14,7 +14,6 @@ public class BotName extends Command {
     public BotName() {
         super();
         category = CommandCategory.OWNER;
-        botRequiredPermissions = Collections.singletonList(Permission.MESSAGE_WRITE);
         minNumberOfArguments = 1;
         maxNumberOfArguments = 5;
     }

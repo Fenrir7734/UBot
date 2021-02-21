@@ -21,7 +21,7 @@ public class Messages {
     public static void sendBasicEmbedMessage(CommandErrorsMsg message, MessageCategory category, MessageChannel channel) {
         sendBasicEmbedMessage(message.getValue(), category, channel);
     }
-
+//To nie działa, I tak ustawia tytuł jako to co się poda w MessageCategory
     public static void sendBasicEmbedMessage(String title, String message, MessageCategory category, MessageChannel channel) {
         channel.sendMessage(Embed.basicMessage(title, message, category))
                 .queue();

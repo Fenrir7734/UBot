@@ -14,7 +14,6 @@ public class Deactivation extends Command {
     public Deactivation() {
         super();
         category = CommandCategory.OWNER;
-        botRequiredPermissions = Collections.singletonList(Permission.MESSAGE_WRITE);
         minNumberOfArguments = 0;
         maxNumberOfArguments = 1;
     }

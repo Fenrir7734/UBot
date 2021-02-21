@@ -14,7 +14,6 @@ public class Help extends Command {
     public Help() {
         super();
         category = CommandCategory.GENERAL;
-        botRequiredPermissions = Collections.singletonList(Permission.MESSAGE_WRITE);
         flags = new String[]{"-h", "-l"};
     }
 
