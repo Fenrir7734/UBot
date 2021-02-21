@@ -1,4 +1,4 @@
-package com.fenrir.ubot.commands.owner;
+package com.fenrir.ubot.commands.administration;
 
 import com.fenrir.ubot.commands.Command;
 import com.fenrir.ubot.commands.CommandCategory;

@@ -4,6 +4,7 @@ import com.fenrir.ubot.commands.CommandEvent;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.util.Collection;
@@ -33,6 +34,9 @@ public class PermissionsVerifier {
     public static boolean canBotSendMessages(Member member, MessageChannel channel) {
         if(channel instanceof TextChannel) {
             return member.hasPermission((TextChannel) channel, Permission.MESSAGE_WRITE);
+        }
+        if(channel instanceof PrivateChannel) {
+            return member.hasPermission(Permission.MESSAGE_WRITE);
         }
         return false;
     }

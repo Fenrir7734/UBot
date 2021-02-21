@@ -1,4 +1,4 @@
-package com.fenrir.ubot.commands.owner;
+package com.fenrir.ubot.commands.administration;
 
 import com.fenrir.ubot.commands.Command;
 import com.fenrir.ubot.commands.CommandCategory;
@@ -9,14 +9,12 @@ import net.dv8tion.jda.api.Permission;
 
 import java.util.Collections;
 
-public class Deactivation extends Command {
+public class Activation extends Command {
 
-    public Deactivation() {
+    public Activation() {
         super();
         category = CommandCategory.OWNER;
         botRequiredPermissions = Collections.singletonList(Permission.MESSAGE_WRITE);
-        minNumberOfArguments = 0;
-        maxNumberOfArguments = 1;
     }
 
     @Override
@@ -29,27 +27,27 @@ public class Deactivation extends Command {
         }
 
         if (!event.isOwner()) {
-            Messages.sendBasicEmbedMessage(CommandErrorsMsg.ONLY_OWNER, MessageCategory.ERROR, event.getChannel());
+            Messages.sendBasicTextMessage(CommandErrorsMsg.ONLY_OWNER, event.getChannel());
             return;
         }
 
-        if (!Config.getConfig().isActive()) {
-            Messages.sendBasicEmbedMessage(Config.getConfig().getBotName() + " has already been deactivated!", MessageCategory.WARNING, event.getChannel());
+        if (Config.getConfig().isActive()) {
+            Messages.sendBasicEmbedMessage(Config.getConfig().getBotName() + " has already been activated!", MessageCategory.WARNING, event.getChannel());
             return;
         }
 
-        Config.getConfig().setActive(false);
-        Messages.sendBasicEmbedMessage(Config.getConfig().getBotName() + "has been deactivated!", MessageCategory.INFO, event.getChannel());
+        Config.getConfig().setActive(true);
+        Messages.sendBasicEmbedMessage(Config.getConfig().getBotName() + " has been activated!", MessageCategory.INFO, event.getChannel());
     }
 
     @Override
     public String getCommand() {
-        return "deactivation";
+        return "activate";
     }
 
     @Override
     public String getBriefDescription() {
-        return "Deactivates the bot";
+        return "Activates the bot";
     }
 
     @Override

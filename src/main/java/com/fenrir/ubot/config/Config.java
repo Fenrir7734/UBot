@@ -15,6 +15,8 @@ public class Config {
     private String token;
     private String prefix;
 
+    private String ownerID;
+
     private boolean active;
     private String botName;
 
