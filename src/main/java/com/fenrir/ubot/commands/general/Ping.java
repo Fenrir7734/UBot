@@ -46,6 +46,12 @@ public class Ping extends Command {
 
     @Override
     public String getSpecificDescription() {
-        return null;
+        return "Checks if the bot is available by replying with a message containing the word \"Pong\" " +
+                "and the time it takes for the bot to reply and send the message. " +
+                "Command takes no arguments.\n" +
+                "*SYNOPSIS*:\n" +
+                "`<prefix>ping [FLAG]`\n" +
+                "*FLAGS*:\n" +
+                "`-h` displays detailed help.";
     }
 }

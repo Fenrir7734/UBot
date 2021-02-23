@@ -12,8 +12,9 @@ import com.fenrir.ubot.commands.general.Ping;
 import com.fenrir.ubot.commands.administration.Activation;
 import com.fenrir.ubot.commands.administration.BotName;
 import com.fenrir.ubot.commands.administration.Deactivation;
+import com.fenrir.ubot.commands.moderation.Purge;
 import com.fenrir.ubot.config.Config;
-import com.fenrir.ubot.listener.CommandListener;
+import com.fenrir.ubot.listener.GuildCommandListener;
 import com.fenrir.ubot.listener.GuildReadyListener;
 import com.fenrir.ubot.listener.PrivateChannelListener;
 import net.dv8tion.jda.api.JDA;
@@ -39,7 +40,7 @@ public class UBot {
         try {
             client = JDABuilder.createDefault(config.getToken())
                     .addEventListeners(
-                            new CommandListener(),
+                            new GuildCommandListener(),
                             new GuildReadyListener(),
                             new PrivateChannelListener()
                     )
@@ -64,7 +65,8 @@ public class UBot {
 
         CommandList.getCommandList().addCommands(
                 new Help(),
-                new Roll()
+                new Roll(),
+                new Purge()
         );
     }
 

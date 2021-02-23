@@ -1,5 +1,7 @@
 package com.fenrir.ubot.commands;
 
+import com.fenrir.ubot.utilities.CommandErrorsMsg;
+import com.fenrir.ubot.utilities.MessageCategory;
 import com.fenrir.ubot.utilities.Messages;
 import net.dv8tion.jda.api.Permission;
 
@@ -41,8 +43,15 @@ public abstract class Command {
     }
 
     protected boolean isHelpFlag(CommandEvent event) {
-        if (event.getArgs().length != 0 && event.getArgs()[0].equals("-h")) {
-            Messages.sendHelpMessage(event.getChannel(), this);
+        if (event.getFlags().length != 0 && event.getFlags()[0].equals("-h")) {
+            if(event.getArgs().length == 0) {
+                Messages.sendHelpMessage(event.getChannel(), this);
+            } else {
+                Messages.sendEmbedMessage(CommandErrorsMsg.TOO_MUCH_ARGUMENTS.getValue(),
+                        MessageCategory.ERROR,
+                        event.getChannel(),
+                        30);
+            }
             return true;
         }
         return false;
@@ -50,5 +59,17 @@ public abstract class Command {
 
     public boolean isOnlyGuild() {
         return isOnlyGuild;
+    }
+
+    public String[] getFlags() {
+        return flags;
+    }
+
+    public int getMaxNumberOfArguments() {
+        return maxNumberOfArguments;
+    }
+
+    public int getMinNumberOfArguments() {
+        return minNumberOfArguments;
     }
 }

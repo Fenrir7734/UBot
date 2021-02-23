@@ -3,6 +3,7 @@ package com.fenrir.ubot.utilities;
 import com.fenrir.ubot.commands.CommandEvent;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.Collection;
 
@@ -27,7 +28,7 @@ public class PermissionsVerifier {
         Member member = event.getBotAsMember();
         TextChannel channel = (TextChannel) event.getChannel();
 
-        return member.hasPermission(channel, Permission.MESSAGE_WRITE);
+        return member.hasPermission(channel, Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS);
     }
 
     public static boolean canBotSendMessages(Member member, MessageChannel channel) {
@@ -43,7 +44,7 @@ public class PermissionsVerifier {
 
         if(!member.hasPermission(channel, requiredPermissions)) {
             if(canBotSendMessages(event)) {
-                Messages.sendBasicEmbedMessage(CommandErrorsMsg.BOT_TOO_LOW_PERMISSION, MessageCategory.ERROR, channel);
+                Messages.sendEmbedMessage(CommandErrorsMsg.BOT_TOO_LOW_PERMISSION, MessageCategory.ERROR, channel);
             }
             return false;
         }
@@ -55,10 +56,23 @@ public class PermissionsVerifier {
         TextChannel channel = (TextChannel) event.getChannel();
 
         if(!member.hasPermission(channel, requiredPermissions)) {
-            Messages.sendBasicEmbedMessage(CommandErrorsMsg.USER_TOO_LOW_PERMISSION, MessageCategory.ERROR, channel);
+            Messages.sendEmbedMessage(CommandErrorsMsg.USER_TOO_LOW_PERMISSION, MessageCategory.ERROR, channel);
             return false;
         }
         return true;
+    }
+
+
+    public static boolean checkRoleHierarchy(CommandEvent event, Member target) {
+        if(event.isOwner()) {
+            return true;
+        }
+
+        if(!event.getBotAsMember().canInteract(target)) {
+            return false;
+        }
+
+        return event.getAuthorAsMember().canInteract(target);
     }
 
 }

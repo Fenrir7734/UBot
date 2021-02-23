@@ -25,14 +25,16 @@ public class Help extends Command {
             return;
         }
 
-        if (event.getArgs().length == 0) {
+        if (event.getFlags().length == 0) {
             event.getChannel()
                     .sendMessage(Embed.basicHelpFormatting(CommandList.getCommandList().getCommandsByCategory()))
                     .queue();
-        } else if (event.getArgs()[0].equals("-l")) {
+        } else if (event.getFlags()[0].equals("-l") && event.getArgs().length == 0) {
             event.getChannel()
                     .sendMessage(Embed.listHelpFormatting(CommandList.getCommandList().getCommandsByCategory()))
                     .queue();
+        } else if(event.getArgs().length > 0) {
+            Messages.sendEmbedMessage(CommandErrorsMsg.TOO_MUCH_ARGUMENTS, MessageCategory.WARNING, event.getChannel());
         }
     }
 
@@ -48,6 +50,13 @@ public class Help extends Command {
 
     @Override
     public String getSpecificDescription() {
-        return null;
+        return "Lists all commands available to the user. Command takes no arguments. " +
+                "By default, it displays a list of commands with a short description. " +
+                "This list may differ depending on the user's permissions.\n" +
+                "*SYNOPSIS*:\n" +
+                "`<prefix>help [FLAG]`\n" +
+                "*FLAGS*:\n" +
+                "`-h` displays detailed help.\n" +
+                "`-l` command list without descriptions, divided into categories.";
     }
 }

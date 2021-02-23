@@ -36,12 +36,12 @@ public class PrivateChannelListener extends ListenerAdapter {
             if(!command.isOnlyGuild()) {
                 command.execute(commandEvent);
             } else {
-                Messages.sendBasicEmbedMessage("This command can be execute only within guild",
+                Messages.sendEmbedMessage("This command can be execute only within guild",
                         MessageCategory.WARNING,
                         event.getChannel());
             }
         } catch (NullPointerException e) {
-            Messages.sendBasicEmbedMessage("I can't find this command. To check list of commands type !help",
+            Messages.sendEmbedMessage("I can't find this command. To check list of commands type !help",
                     MessageCategory.ERROR,
                     event.getChannel());
         }

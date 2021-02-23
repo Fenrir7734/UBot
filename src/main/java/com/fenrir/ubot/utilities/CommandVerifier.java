@@ -8,30 +8,32 @@ public class CommandVerifier {
 
     public static boolean isCommandCorrect(CommandEvent event, int minNumberOfArguments, int maxNumberOfArguments, String[] flags) {
         CommandErrorsMsg error;
-        if ((error = checkCommand(event.getArgs(), minNumberOfArguments, maxNumberOfArguments, flags)) != null) {
-            Messages.sendBasicEmbedMessage(error, MessageCategory.ERROR, event.getChannel());
+        if ((error = checkCommand(event, minNumberOfArguments, maxNumberOfArguments, flags)) != null) {
+            Messages.sendEmbedMessage(error, MessageCategory.ERROR, event.getChannel());
             return false;
         }
         return true;
     }
 
-    private static CommandErrorsMsg checkCommand(String[] args, int minNumberOfArguments, int maxNumberOfArguments, String[] flags) {
+    private static CommandErrorsMsg checkCommand(CommandEvent event, int minNumberOfArguments, int maxNumberOfArguments, String[] flags) {
+        String[] eventArgs = event.getArgs();
+        String[] eventFlags = event.getFlags();
 
-        if (args.length == 0) {
-            return checkNumberOfArguments(args, minNumberOfArguments, maxNumberOfArguments);
+        if (eventArgs.length == 0 && eventFlags.length == 0) {
+            return checkNumberOfArguments(eventArgs, minNumberOfArguments, maxNumberOfArguments);
         }
 
-        boolean isFlag = args[0].startsWith("-");
+        boolean isFlag = eventFlags.length >= 1;
 
-        if (isFlag && !checkFlags(args[0], flags)) {
-            return CommandErrorsMsg.INVALID_FLAG;
-        }
-
-        if (isFlag && args.length > 1) {
+        if(eventFlags.length > 1) {
             return CommandErrorsMsg.TOO_MUCH_ARGUMENTS;
         }
 
-        return isFlag ? null : checkNumberOfArguments(args, minNumberOfArguments, maxNumberOfArguments);
+        if (isFlag && !checkFlags(eventFlags[0], flags)) {
+            return CommandErrorsMsg.INVALID_FLAG;
+        }
+
+        return isFlag ? null : checkNumberOfArguments(eventArgs, minNumberOfArguments, maxNumberOfArguments);
     }
 
 

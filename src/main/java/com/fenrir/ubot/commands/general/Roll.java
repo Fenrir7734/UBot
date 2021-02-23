@@ -35,9 +35,9 @@ public class Roll extends Command {
                 seq = getSings(event.getArgs()[0]);
             }
 
-            Messages.sendBasicTextMessage("You rolled " + getRandom(seq), event.getChannel());
+            Messages.sendMessage("You rolled " + getRandom(seq), event.getChannel());
         } catch (NullPointerException e) {
-            Messages.sendBasicEmbedMessage(CommandErrorsMsg.INVALID_ARGUMENTS, MessageCategory.ERROR, event.getChannel());
+            Messages.sendEmbedMessage(CommandErrorsMsg.INVALID_ARGUMENTS, MessageCategory.ERROR, event.getChannel());
         }
     }
 
@@ -100,12 +100,16 @@ public class Roll extends Command {
 
     @Override
     public String getSpecificDescription() {
-        return  "The command takes either 0 or 1 argument. " +
-                "If no argument is given, the command randomizes from ranges `[1-6]`. " +
-                "By giving an argument you can define the scope yourself. " +
-                "The argument can only contain numbers and letters of the Latin alphabet.\n" +
-                "The argument can take two forms:\n" +
-                "`{a, b, c, d}` will randomize one of the given letters\n" +
-                "`[a-d]` will randomize one letter from the given range\n";
+        return  "The command takes either 0 or 1 argument. If no argument is given, " +
+                "the command randomizes from ranges `[1-6]`. By giving an argument you " +
+                "can define the scope yourself.The argument can take two forms:\n" +
+                "`{a, b, c, d}` will randomize one of the given signs or words.\n" +
+                "`[a-d]` will randomize one letter from the given range. Scope can only " +
+                "contain numbers and letters of the Latin alphabet. The order of characters " +
+                "is the same as in the ASCII standard.\n" +
+                "*SYNOPSIS*:\n" +
+                "`<prefix>roll [FLAG | ARGUMENT]`\n" +
+                "*FLAGS*:\n" +
+                "`-h` displays detailed help.";
     }
 }

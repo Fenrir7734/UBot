@@ -28,7 +28,7 @@ public class BotName extends Command {
         }
 
         if (!event.isOwner()) {
-            Messages.sendBasicTextMessage(CommandErrorsMsg.ONLY_OWNER, event.getChannel());
+            Messages.sendEmbedMessage(CommandErrorsMsg.ONLY_OWNER, MessageCategory.INFO, event.getChannel());
             return;
         }
 
@@ -44,15 +44,15 @@ public class BotName extends Command {
                         .queue();
                 Config.getConfig().setBotName(newName);
 
-                Messages.sendBasicEmbedMessage("Bot renamed!", MessageCategory.INFO, event.getChannel());
+                Messages.sendEmbedMessage("Bot renamed!", MessageCategory.INFO, event.getChannel());
             } else {
-                Messages.sendBasicEmbedMessage("Nick name must be 32 or fewer in length.", MessageCategory.ERROR, event.getChannel());
+                Messages.sendEmbedMessage("Nick name must be 32 or fewer in length.", MessageCategory.ERROR, event.getChannel());
             }
         } catch (NullPointerException e) {
             String message = "Error: renaming failed. " +
                     " Cannot find or rename a user with the given name. " +
                     " Check the log for more details.";
-            Messages.sendBasicEmbedMessage(message, MessageCategory.ERROR, event.getChannel());
+            Messages.sendEmbedMessage(message, MessageCategory.ERROR, event.getChannel());
         }
     }
 
@@ -68,6 +68,12 @@ public class BotName extends Command {
 
     @Override
     public String getSpecificDescription() {
-        return null;
+        return "Changes bot nickname. Command takes one argument, can only be executed by the owner. " +
+                "If the nickname consists of more than one word, it must be enclosed in single quotes, " +
+                "otherwise an error will be returned.\n" +
+                "*SYNOPSIS*:\n" +
+                "`<prefix>botrename [FLAG | ARGUMENT | 'ARGUMENTS... ']`\n" +
+                "*FLAGS*:\n" +
+                "`-h` displays detailed help";
     }
 }

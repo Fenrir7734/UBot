@@ -28,17 +28,17 @@ public class Deactivation extends Command {
         }
 
         if (!event.isOwner()) {
-            Messages.sendBasicEmbedMessage(CommandErrorsMsg.ONLY_OWNER, MessageCategory.ERROR, event.getChannel());
+            Messages.sendEmbedMessage(CommandErrorsMsg.ONLY_OWNER, MessageCategory.ERROR, event.getChannel());
             return;
         }
 
         if (!Config.getConfig().isActive()) {
-            Messages.sendBasicEmbedMessage(Config.getConfig().getBotName() + " has already been deactivated!", MessageCategory.WARNING, event.getChannel());
+            Messages.sendEmbedMessage(Config.getConfig().getBotName() + " has already been deactivated!", MessageCategory.WARNING, event.getChannel());
             return;
         }
 
         Config.getConfig().setActive(false);
-        Messages.sendBasicEmbedMessage(Config.getConfig().getBotName() + "has been deactivated!", MessageCategory.INFO, event.getChannel());
+        Messages.sendEmbedMessage(Config.getConfig().getBotName() + "has been deactivated!", MessageCategory.INFO, event.getChannel());
     }
 
     @Override
@@ -53,6 +53,12 @@ public class Deactivation extends Command {
 
     @Override
     public String getSpecificDescription() {
-        return null;
+        return "Deactivates the bot. Command takes no arguments, can only be executed by the owner. " +
+                "After executing this command, the bot becomes inactive and only initialization commands " +
+                "will be available in guild.\n" +
+                "*SYNOPSIS*:\n" +
+                "`<prefix>deactivation [FLAG]`\n" +
+                "*FLAGS*:\n" +
+                "`-h` displays detailed help.";
     }
 }

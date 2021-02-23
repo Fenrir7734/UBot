@@ -18,7 +18,7 @@ public class GuildReadyListener extends ListenerAdapter {
             if(channel.canTalk()) {
                 String message = "Hi!\n My name is u Ubot and I am bot. " +
                         "\n If you want to know what commands you can use, type <prefix> help\n";
-                Messages.sendBasicEmbedMessage(message, MessageCategory.MESSAGE, channel);
+                //Messages.sendEmbedMessage(message, MessageCategory.MESSAGE, channel);
             }
         }
 

@@ -26,17 +26,17 @@ public class Activation extends Command {
         }
 
         if (!event.isOwner()) {
-            Messages.sendBasicTextMessage(CommandErrorsMsg.ONLY_OWNER, event.getChannel());
+            Messages.sendEmbedMessage(CommandErrorsMsg.ONLY_OWNER, MessageCategory.INFO, event.getChannel());
             return;
         }
 
         if (Config.getConfig().isActive()) {
-            Messages.sendBasicEmbedMessage(Config.getConfig().getBotName() + " has already been activated!", MessageCategory.WARNING, event.getChannel());
+            Messages.sendEmbedMessage(Config.getConfig().getBotName() + " has already been activated!", MessageCategory.WARNING, event.getChannel());
             return;
         }
 
         Config.getConfig().setActive(true);
-        Messages.sendBasicEmbedMessage(Config.getConfig().getBotName() + " has been activated!", MessageCategory.INFO, event.getChannel());
+        Messages.sendEmbedMessage(Config.getConfig().getBotName() + " has been activated!", MessageCategory.INFO, event.getChannel());
     }
 
     @Override
@@ -51,6 +51,11 @@ public class Activation extends Command {
 
     @Override
     public String getSpecificDescription() {
-        return null;
+        return "Activates the bot. Command takes no arguments, can only be executed by the owner. " +
+                "Until the bot is activated in the guild, only the initializing commands are available.\n" +
+                "*SYNOPSIS*:\n" +
+                "`<prefix>activation [FLAG]`\n" +
+                "*FLAGS*:\n" +
+                "`-h` displays detailed help.";
     }
 }

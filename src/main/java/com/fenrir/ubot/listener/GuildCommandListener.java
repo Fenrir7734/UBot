@@ -18,11 +18,10 @@ import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
-public class CommandListener extends ListenerAdapter {
+public class GuildCommandListener extends ListenerAdapter {
 
     private final CommandList commandList = CommandList.getCommandList();
 
-    //Może przydało by sie to zmienić na onGuildMessageReceived
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
         if (event.isFromType(ChannelType.PRIVATE)) {
@@ -48,29 +47,30 @@ public class CommandListener extends ListenerAdapter {
 
         boolean hasSendingPermission = PermissionsVerifier.canBotSendMessages(event.getGuild().getSelfMember(), event.getChannel());
 
+        if(!hasSendingPermission) {
+            Messages.sendErrorSendingPermissionMessages(event);
+            return;
+        }
+
         if (event.getMessage().getContentRaw().length() <= 1) {
-            if(hasSendingPermission) {
-                Messages.sendBasicEmbedMessage("You have to specify the command. To check list of commands type !help",
-                        MessageCategory.WARNING,
-                        event.getChannel());
-            }
+            Messages.sendEmbedMessage("You have to specify the command. To check list of commands type !help",
+                    MessageCategory.WARNING,
+                    event.getChannel());
             return;
         }
 
         CommandEvent commandEvent = new CommandEvent(event);
 
         try {
-            if (Config.getConfig().isActive()) {
+            if (Config.getConfig().isActive()) { //tutaj trzeba zmienic to na setting ale na razie mi pasuje tak jak jest
                 commandList.search(commandEvent.getCommand()).execute(commandEvent);
             } else {
                 commandList.searchInit(commandEvent.getCommand()).execute(commandEvent);
             }
         } catch (NullPointerException e) {
-            if(hasSendingPermission) {
-                Messages.sendBasicEmbedMessage("I can't find this command. To check list of commands type !help",
-                        MessageCategory.ERROR,
-                        event.getChannel());
-            }
+            Messages.sendEmbedMessage("I can't find this command. To check list of commands type !help",
+                    MessageCategory.ERROR,
+                    event.getChannel());
         }
 
     }
