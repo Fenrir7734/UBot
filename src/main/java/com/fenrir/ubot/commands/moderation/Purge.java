@@ -3,26 +3,19 @@ package com.fenrir.ubot.commands.moderation;
 import com.fenrir.ubot.commands.Command;
 import com.fenrir.ubot.commands.CommandCategory;
 import com.fenrir.ubot.commands.CommandEvent;
-import com.fenrir.ubot.utilities.CommandVerifier;
-import com.fenrir.ubot.utilities.PermissionsVerifier;
+import com.fenrir.ubot.utilities.*;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.ISnowflake;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageHistory;
-import org.apache.logging.log4j.core.net.TcpSocketManager;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Purge extends Command {
-
-    private int toDelete;
-    private String pattern;
-    private List<Member> mentioned;
-
-    private List<Message> history;
 
     public Purge() {
         super();
@@ -46,94 +39,121 @@ public class Purge extends Command {
             return;
         }
 
-        //String flag = event.getFlags()[0];
-        //System.out.println(event.getMessage().getMentionedMembers());
-        //System.out.println(event.getMessage().getContentRaw());
-
-        System.out.println(checkCommandStructure(event));
-        System.out.println(toDelete);
-        System.out.println(pattern);
-        System.out.println(mentioned.toString());
-        toDelete = 0;
-        pattern = "";
-        mentioned = null;
-    }
-
-    private void purge(CommandEvent event) {
         String[] args = event.getArgs();
 
-        int toDelete = 0;
-        String pattern = "";
-        List<Member> mentioned = null;
-
-
-
-        if(event.getArgs().length > 0) {
-            try {
-                toDelete = Integer.parseInt(args[0]);
-            } catch (NumberFormatException e) {
-                System.out.println(e);
-                return;
-            }
-
-            if(args.length > 1 && args[1].startsWith("'") && args[1].endsWith("'")) {
-                pattern = event.getArgs()[1];
-            } else if(args.length > 1 && args[1].startsWith("'")) {
-                return;
-            } else if(args.length > 1 && args[1].endsWith("'")) {
-                return;
-            }
-
-            mentioned = event.getMessage().getMentionedMembers();
-        }
-
-        System.out.println(pattern);
-        System.out.println(mentioned);
+        int toDelete;
+        String pattern = null;
+        List<String> mentioned = null;
 
         try {
-            event.getChannel()
-                    .getHistory()
-                    .retrievePast(toDelete)
-                    .complete()
-                    .forEach(message -> message.delete().queue());
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public boolean checkCommandStructure(CommandEvent event) {
-        String[] args = event.getArgs();
-
-        try {
-            toDelete = Integer.parseInt(args[0]);
+            toDelete = getNumberFromCommand(args[0]);
         } catch (NumberFormatException e) {
-            return false;
+            Messages.sendEmbedMessage("First argument must be always a number.",
+                    MessageCategory.ERROR,
+                    event.getChannel(),
+                    30);
+            return;
         }
+        System.out.println(specifyArguments(args).name());
+
+        switch (specifyArguments(args)) {
+            case ONLY_NUMBER:
+                break;
+            case PATTERN:
+                pattern = getPatternFromCommand(args[1]);
+                purge(event, toDelete, pattern, null);
+                break;
+            case USER:
+                mentioned = getMentionedIDFromCommand(event);
+                purge(event, toDelete, null, mentioned);
+                break;
+            case PATTERN_USER:
+                pattern = getPatternFromCommand(args[1]);
+                mentioned = getMentionedIDFromCommand(event);
+                purge(event, toDelete, pattern, mentioned);
+                break;
+            case INCORRECT:
+                Messages.sendEmbedMessage("One or more arguments are not valid.",
+                        MessageCategory.ERROR,
+                        event.getChannel(),
+                        30);
+                return;
+        }
+
+        purge(event, toDelete, pattern, mentioned);
+
+    }
+
+    private void purge(CommandEvent event, int toDelete, String pattern, List<String> mentioned) {
+        List<Message> messages = event.getChannel()
+                .getHistory()
+                .retrievePast(toDelete)
+                .complete()
+                .stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        if(pattern != null) {
+            messages = messages.stream()
+                    .filter(message -> message.getContentRaw().contains(pattern))
+                    .collect(Collectors.toList());
+        }
+
+        if(mentioned != null) {
+            messages = messages.stream()
+                    .filter(message -> mentioned.contains(Objects.requireNonNull(message.getMember()).getId()))
+                    .collect(Collectors.toList());
+        }
+
+        messages.forEach(message -> message.delete().queue());
+    }
+
+    private ArgumentType specifyArguments(String[] args) {
 
         if(args.length == 1) {
-            return true;
+            return ArgumentType.ONLY_NUMBER;
         }
-        int i = 1;
-        if(args[1].startsWith("'")) {
-            if(args[1].endsWith("'")) {
-                pattern = args[1];
-            } else {
-                return false;
+
+        if(args.length == 2) {
+            if(args[1].startsWith("{") && args[1].endsWith("}")) {
+                return ArgumentType.PATTERN;
+            } else if(args[1].startsWith("<@!")) {
+                return ArgumentType.USER;
             }
-            i = 2;
         }
 
-        while(i < args.length) {
-            if(!args[i].startsWith("<@!")) {
-                return false;
+        if(args[1].startsWith("{") && args[1].endsWith("}")) {
+            for (int i = 2; i < args.length; i++) {
+                if(!(args[i].startsWith("<@!") && args[i].endsWith(">"))) {
+                    return ArgumentType.INCORRECT;
+                }
             }
-            i++;
+            return ArgumentType.PATTERN_USER;
+        } else if(args[1].startsWith("<@!")){
+            for (int i = 1; i < args.length; i++) {
+                if(!(args[i].startsWith("<@!") && args[i].endsWith(">"))) {
+                    return ArgumentType.INCORRECT;
+                }
+            }
+            return ArgumentType.USER;
         }
 
-        mentioned = event.getMessage().getMentionedMembers();
+        return ArgumentType.INCORRECT;
+    }
 
-        return true;
+    private int getNumberFromCommand(String arg) throws NumberFormatException {
+        return Integer.parseInt(arg);
+    }
+
+    private String getPatternFromCommand(String arg) {
+        return arg.replace("{", "")
+                .replace("}", "");
+    }
+
+    private List<String> getMentionedIDFromCommand(CommandEvent event) {
+        return event.getMessage().getMentionedMembers().stream()
+                .map(ISnowflake::getId)
+                .collect(Collectors.toList());
     }
 
 
@@ -162,5 +182,13 @@ public class Purge extends Command {
                 "with this flag, it should be confirmed with the command `!confirm`. " +
                 "The bot waits for confirmation for 30 seconds. I" +
                 "f the command is not confirmed, no changes will be made.\n";
+    }
+
+    private enum ArgumentType {
+        ONLY_NUMBER,
+        PATTERN,
+        USER,
+        PATTERN_USER,
+        INCORRECT
     }
 }

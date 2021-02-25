@@ -15,7 +15,7 @@ public class CommandEvent {
     private final String prefix = Config.getConfig().getPrefix();
     private final MessageReceivedEvent event;
     private final MessageChannel channel;
-    private Message message;
+    private final Message message;
     private String command;
     private String[] args;
     private String[] flags;
@@ -34,9 +34,10 @@ public class CommandEvent {
         List<String> list = Arrays.stream(event.getMessage().getContentRaw()
                 .replaceFirst(prefix, "")
                 .strip()
-                .split(" (?![^{]*})"))    //arguments are split by " ". It ignores the content of the brackets.
+                .split(" (?!(([^{]*})|([^']*')))"))    //arguments are split by " ". It ignores the content of the brackets." (?![^{]*})"
                 .map(String::trim)
                 .collect(Collectors.toList());
+        System.out.println(list.toString());
 
         command = list.get(0).toLowerCase();
         flags = list.stream()
