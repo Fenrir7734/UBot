@@ -6,7 +6,6 @@ import com.fenrir.ubot.commands.CommandEvent;
 import com.fenrir.ubot.utilities.*;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.ISnowflake;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 
 import java.util.Arrays;
@@ -54,23 +53,19 @@ public class Purge extends Command {
                     30);
             return;
         }
-        System.out.println(specifyArguments(args).name());
 
         switch (specifyArguments(args)) {
             case ONLY_NUMBER:
                 break;
             case PATTERN:
                 pattern = getPatternFromCommand(args[1]);
-                purge(event, toDelete, pattern, null);
                 break;
             case USER:
                 mentioned = getMentionedIDFromCommand(event);
-                purge(event, toDelete, null, mentioned);
                 break;
             case PATTERN_USER:
                 pattern = getPatternFromCommand(args[1]);
                 mentioned = getMentionedIDFromCommand(event);
-                purge(event, toDelete, pattern, mentioned);
                 break;
             case INCORRECT:
                 Messages.sendEmbedMessage("One or more arguments are not valid.",
@@ -104,7 +99,6 @@ public class Purge extends Command {
                     .filter(message -> mentioned.contains(Objects.requireNonNull(message.getMember()).getId()))
                     .collect(Collectors.toList());
         }
-
         messages.forEach(message -> message.delete().queue());
     }
 
