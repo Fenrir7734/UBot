@@ -35,7 +35,7 @@ public class Roll extends Command {
                 seq = getSings(event.getArgs()[0]);
             }
 
-            Messages.sendMessage("You rolled " + getRandom(seq), event.getChannel());
+            Messages.sendMessage("You rolled " + Utilities.randomElementFromArray(seq), event.getChannel());
         } catch (NullPointerException e) {
             Messages.sendEmbedMessage(CommandErrorsMsg.INVALID_ARGUMENTS, MessageCategory.ERROR, event.getChannel());
         }
@@ -82,10 +82,6 @@ public class Roll extends Command {
             star++;
         }
         return sings.toArray(new String[0]);
-    }
-
-    private String getRandom(String[] signSeq) throws NullPointerException {
-        return signSeq[new Random().nextInt(signSeq.length)];
     }
 
     @Override

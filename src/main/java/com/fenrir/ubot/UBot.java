@@ -6,6 +6,7 @@
 package com.fenrir.ubot;
 
 import com.fenrir.ubot.commands.CommandList;
+import com.fenrir.ubot.commands.general.Meme;
 import com.fenrir.ubot.commands.general.Roll;
 import com.fenrir.ubot.commands.general.Help;
 import com.fenrir.ubot.commands.general.Ping;
@@ -66,7 +67,8 @@ public class UBot {
         CommandList.getCommandList().addCommands(
                 new Help(),
                 new Roll(),
-                new Purge()
+                new Purge(),
+                new Meme()
         );
     }
 

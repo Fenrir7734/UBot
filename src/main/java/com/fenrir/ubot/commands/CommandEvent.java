@@ -37,7 +37,6 @@ public class CommandEvent {
                 .split(" (?!(([^{]*})|([^']*')))"))    //arguments are split by " ". It ignores the content of the brackets." (?![^{]*})"
                 .map(String::trim)
                 .collect(Collectors.toList());
-        System.out.println(list.toString());
 
         command = list.get(0).toLowerCase();
         flags = list.stream()

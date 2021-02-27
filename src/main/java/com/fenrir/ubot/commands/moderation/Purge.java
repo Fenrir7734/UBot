@@ -23,7 +23,7 @@ public class Purge extends Command {
         botRequiredPermissions = Arrays.asList(Permission.MESSAGE_MANAGE, Permission.MESSAGE_WRITE, Permission.MESSAGE_EMBED_LINKS, Permission.MESSAGE_READ);
         minNumberOfArguments = 1;
         maxNumberOfArguments = 10;
-        flags = new String[]{"-h", "-n", "-a"};
+        flags = new String[]{"-h", "-a"};
     }
 
     @Override
@@ -164,14 +164,15 @@ public class Purge extends Command {
     @Override
     public String getSpecificDescription() {
         return "Deletes messages in the text channel on which this command was invoked. " +
-                "By setting the appropriate flags, the command can delete a certain number " +
-                "of messages starting from the last one sent or clear the entire text channel.\n" +
+                "By default, the command always takes the number of messages to be deleted as the " +
+                "first argument and then you can enter a specific phrase after which messages to " +
+                "be deleted will be searched and users whose messages will be deleted. " +
+                "The phrase after which messages for deletion will be searched for must be between the brackets. " +
+                "Message will be searched starting from the last one sent. " +
                 "*SYNOPSIS*:\n" +
-                "`<prefix>purge [FLAG] [ARGUMENT] [USER | ROLE]`\n" +
+                "`<prefix>purge [FLAG] [ARGUMENT] [USER]`\n" +
                 "*FLAGS*:\n" +
                 "`-h` displays detailed help.\n" +
-                "`-n` deletes the specified number of messages starting from the last sent. " +
-                "This flag must always be followed by an argument specifying the number of messages to be deleted.\n" +
                 "`-a` deletes all messages in the text channel. After typing the command " +
                 "with this flag, it should be confirmed with the command `!confirm`. " +
                 "The bot waits for confirmation for 30 seconds. I" +
