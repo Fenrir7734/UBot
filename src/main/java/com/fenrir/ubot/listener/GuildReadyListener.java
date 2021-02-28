@@ -1,8 +1,6 @@
 package com.fenrir.ubot.listener;
 
 import com.fenrir.ubot.config.GuildSettings;
-import com.fenrir.ubot.utilities.MessageCategory;
-import com.fenrir.ubot.utilities.Messages;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;

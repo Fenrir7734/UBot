@@ -1,6 +1,9 @@
 package com.fenrir.ubot.utilities;
 
 import com.fenrir.ubot.commands.CommandEvent;
+import com.fenrir.ubot.utilities.message.CommandErrorsMsg;
+import com.fenrir.ubot.utilities.message.MessageCategory;
+import com.fenrir.ubot.utilities.message.Messages;
 
 import java.util.Arrays;
 

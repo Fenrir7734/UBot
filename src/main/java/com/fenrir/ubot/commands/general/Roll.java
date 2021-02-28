@@ -4,12 +4,12 @@ import com.fenrir.ubot.commands.Command;
 import com.fenrir.ubot.commands.CommandCategory;
 import com.fenrir.ubot.commands.CommandEvent;
 import com.fenrir.ubot.utilities.*;
-import net.dv8tion.jda.api.Permission;
+import com.fenrir.ubot.utilities.message.CommandErrorsMsg;
+import com.fenrir.ubot.utilities.message.MessageCategory;
+import com.fenrir.ubot.utilities.message.Messages;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Random;
 
 public class Roll extends Command {
 

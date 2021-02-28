@@ -1,6 +1,7 @@
-package com.fenrir.ubot.utilities;
+package com.fenrir.ubot.utilities.message;
 
 import com.fenrir.ubot.commands.Command;
+import com.fenrir.ubot.utilities.imageUtil.ImageData;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -44,10 +45,26 @@ public class Messages {
         sendEmbedMessage(category.getValue(), message, category, channel, delay);
     }
 
+    public static void sendEmbedMessage(CommandErrorsMsg message, MessageCategory category, MessageChannel channel, int delay) {
+        sendEmbedMessage(category.getValue(), message.getValue(), category, channel, delay);
+    }
+
     public static void sendHelpMessage(MessageChannel channel, Command command) {
         channel.sendMessage(Embed
                 .commandHelpFormatting(command.getCommand(), command.getBriefDescription(), command.getSpecificDescription()))
-                .queue();
+                .queue(newMessage -> newMessage.delete()
+                        .queueAfter(2, TimeUnit.MINUTES));
+    }
+
+
+    public static void sendImage(ImageData imageData, MessageChannel channel) {
+        channel.sendMessage(Embed.memeMessage(imageData)).queue();
+    }
+
+    public static void sendList(String[] list, MessageChannel channel) {
+        channel.sendMessage(Embed.listSubredditFormatting(list))
+                .queue(newMessage -> newMessage.delete()
+                        .queueAfter(2, TimeUnit.MINUTES));
     }
 
     public static void sendTextPrivateMessage(String message, User target) {

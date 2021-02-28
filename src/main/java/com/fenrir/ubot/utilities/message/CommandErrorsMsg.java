@@ -1,4 +1,4 @@
-package com.fenrir.ubot.utilities;
+package com.fenrir.ubot.utilities.message;
 
 import com.fenrir.ubot.config.Config;
 

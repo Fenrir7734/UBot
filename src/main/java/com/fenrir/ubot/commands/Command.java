@@ -1,8 +1,8 @@
 package com.fenrir.ubot.commands;
 
-import com.fenrir.ubot.utilities.CommandErrorsMsg;
-import com.fenrir.ubot.utilities.MessageCategory;
-import com.fenrir.ubot.utilities.Messages;
+import com.fenrir.ubot.utilities.message.CommandErrorsMsg;
+import com.fenrir.ubot.utilities.message.MessageCategory;
+import com.fenrir.ubot.utilities.message.Messages;
 import net.dv8tion.jda.api.Permission;
 
 import java.util.Arrays;

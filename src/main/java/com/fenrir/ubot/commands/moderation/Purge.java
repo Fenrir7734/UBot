@@ -4,6 +4,8 @@ import com.fenrir.ubot.commands.Command;
 import com.fenrir.ubot.commands.CommandCategory;
 import com.fenrir.ubot.commands.CommandEvent;
 import com.fenrir.ubot.utilities.*;
+import com.fenrir.ubot.utilities.message.MessageCategory;
+import com.fenrir.ubot.utilities.message.Messages;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.ISnowflake;
 import net.dv8tion.jda.api.entities.Message;

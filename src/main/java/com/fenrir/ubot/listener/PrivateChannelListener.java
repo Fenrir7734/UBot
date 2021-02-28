@@ -4,11 +4,10 @@ import com.fenrir.ubot.commands.Command;
 import com.fenrir.ubot.commands.CommandEvent;
 import com.fenrir.ubot.commands.CommandList;
 import com.fenrir.ubot.config.Config;
-import com.fenrir.ubot.utilities.MessageCategory;
-import com.fenrir.ubot.utilities.Messages;
+import com.fenrir.ubot.utilities.message.MessageCategory;
+import com.fenrir.ubot.utilities.message.Messages;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
