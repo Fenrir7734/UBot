@@ -20,7 +20,6 @@ import com.fenrir.ubot.listener.GuildReadyListener;
 import com.fenrir.ubot.listener.PrivateChannelListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import org.apache.logging.log4j.core.Logger;
 
 import javax.security.auth.login.LoginException;
 
@@ -29,7 +28,6 @@ public class UBot {
     private static JDA client;
     private static CommandList commandList;
     private static Config config;
-    private static Logger logger;
 
     public static void main(String[] args) {
         config = new Config();
