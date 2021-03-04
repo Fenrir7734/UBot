@@ -8,6 +8,7 @@ import com.fenrir.ubot.utilities.PermissionsVerifier;
 import net.dv8tion.jda.api.Permission;
 
 import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 public class Ping extends Command {
 
@@ -31,7 +32,7 @@ public class Ping extends Command {
         event.getChannel().sendMessage("Pong")
                 .queue(time ->
                         time.editMessage("Pong " + (System.currentTimeMillis() - currentTime) + "ms")
-                                .queue());
+                                .queue(newMessage -> newMessage.delete().queueAfter(2, TimeUnit.MINUTES)));
     }
 
     @Override

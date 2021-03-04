@@ -2,8 +2,6 @@ package com.fenrir.ubot.utilities;
 
 import java.util.List;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Utilities {
 

@@ -1,8 +1,10 @@
 package com.fenrir.ubot.config;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.awt.*;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -11,6 +13,10 @@ public class Config {
     private static Config config = null;
 
     private final String path;
+
+    private String databaseName;
+    private String databaseLogin;
+    private String databasePassword;
 
     private String token;
     private String prefix;
@@ -26,7 +32,7 @@ public class Config {
     private Color errorColor;
     private Color helpColor;
 
-    public Config() {
+    public Config() throws IOException, JSONException {
         path = "Config.json";
         config = this;
         active = true;
@@ -51,6 +57,18 @@ public class Config {
 
     public static Config getConfig() {
         return config;
+    }
+
+    public String getDatabaseName() {
+        return databaseName;
+    }
+
+    public String getDatabaseLogin() {
+        return databaseLogin;
+    }
+
+    public String getDatabasePassword() {
+        return databasePassword;
     }
 
     public String getToken() {
@@ -89,17 +107,16 @@ public class Config {
         return active;
     }
 
-    private void load() {
-        try {
-            String content = new String(Files.readAllBytes(Paths.get(path)));
-            JSONObject object = new JSONObject(content);
+    private void load() throws JSONException, IOException {
+        String content = new String(Files.readAllBytes(Paths.get(path)));
+        JSONObject object = new JSONObject(content);
 
-            token = object.getString("token");
-            prefix = object.getString("prefix");
+        token = object.getString("token");
+        prefix = object.getString("prefix");
 
-        } catch (Exception e) {
-            System.out.println(e.getMessage()); //TODO: Coś z tym zrobić i dodać Logger
-        }
+        databaseName = object.getString("database-name");
+        databaseLogin = object.getString("database-login");
+        databasePassword = object.getString("database-password");
     }
 
 }

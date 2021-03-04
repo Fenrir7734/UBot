@@ -12,7 +12,7 @@ public class CommandVerifier {
     public static boolean isCommandCorrect(CommandEvent event, int minNumberOfArguments, int maxNumberOfArguments, String[] flags) {
         CommandErrorsMsg error;
         if ((error = checkCommand(event, minNumberOfArguments, maxNumberOfArguments, flags)) != null) {
-            Messages.sendEmbedMessage(error, MessageCategory.ERROR, event.getChannel());
+            Messages.sendEmbedMessage(error, MessageCategory.ERROR, event.getChannel(), 60);
             return false;
         }
         return true;

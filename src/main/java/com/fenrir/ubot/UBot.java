@@ -20,22 +20,48 @@ import com.fenrir.ubot.listener.GuildReadyListener;
 import com.fenrir.ubot.listener.PrivateChannelListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import org.json.JSONException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
+import java.io.IOException;
 
 public class UBot {
+
+    private static final Logger log = LoggerFactory.getLogger(UBot.class);
 
     private static JDA client;
     private static CommandList commandList;
     private static Config config;
 
     public static void main(String[] args) {
-        config = new Config();
-        initCommands();
-        bootBot();
+        log.info("Starting...");
+
+        try {
+            log.info("Loading configuration...");
+
+            config = new Config();
+
+            log.info("Configuration loaded.");
+
+            initCommands();
+            bootBot();
+
+        } catch (IOException e) {
+            log.error("Failed to read the {} file.", "Config.json");
+        } catch (JSONException e) {
+            log.error("The configuration file is invalid.");
+        } catch (Exception e) {
+            log.error("Something went wrong: {}", e.getMessage());
+            log.error("Stopping the bot");
+            System.exit(0);
+        }
+        log.info("The bot has been successfully built and is ready to go!");
     }
 
     public static void bootBot() {
+        log.info("Try to build new JDA instance...");
         try {
             client = JDABuilder.createDefault(config.getToken())
                     .addEventListeners(
@@ -46,15 +72,21 @@ public class UBot {
                     .build();
             client.awaitReady();
             Config.getConfig().setBotName(client.getSelfUser().getName());
-        } catch (LoginException e) {
-            System.out.println(e.getMessage()); //TODO: Zrobić coś z tym, najlepiej dodać logger
+        } catch (LoginException | IllegalArgumentException e) {
+            log.error("New JDA instance could not be created. Check if provided token is valid.");
+            log.error("Stopping the bot");
+            System.exit(0);
         } catch (InterruptedException e) {
-            System.out.println(e.getMessage());
+            log.error("Thread was interrupted during creating new JDA instance.");
+            log.error("Stopping the bot");
+            System.exit(0);
         }
-
+        log.info("JDA instance build successfully.");
     }
 
     private static void initCommands() {
+        log.info("Initiating commands...");
+
         CommandList.getCommandList().addInitCommands(
                 new Ping(),
                 new Activation(),
@@ -68,6 +100,7 @@ public class UBot {
                 new Purge(),
                 new Meme()
         );
+        log.info("Commands initialized successfully.");
     }
 
     public static JDA getClient() {

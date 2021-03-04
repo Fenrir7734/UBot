@@ -46,13 +46,13 @@ public class Purge extends Command {
         String pattern = null;
         List<String> mentioned = null;
 
-        try {
+        if(Utilities.isNumeric(args[0])) {
             toDelete = getNumberFromCommand(args[0]);
-        } catch (NumberFormatException e) {
+        } else {
             Messages.sendEmbedMessage("First argument must be always a number.",
                     MessageCategory.ERROR,
                     event.getChannel(),
-                    30);
+                    60);
             return;
         }
 
@@ -73,7 +73,7 @@ public class Purge extends Command {
                 Messages.sendEmbedMessage("One or more arguments are not valid.",
                         MessageCategory.ERROR,
                         event.getChannel(),
-                        30);
+                        60);
                 return;
         }
 
@@ -137,7 +137,7 @@ public class Purge extends Command {
         return ArgumentType.INCORRECT;
     }
 
-    private int getNumberFromCommand(String arg) throws NumberFormatException {
+    private int getNumberFromCommand(String arg) {
         return Integer.parseInt(arg);
     }
 

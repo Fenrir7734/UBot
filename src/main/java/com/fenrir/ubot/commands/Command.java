@@ -4,9 +4,11 @@ import com.fenrir.ubot.utilities.message.CommandErrorsMsg;
 import com.fenrir.ubot.utilities.message.MessageCategory;
 import com.fenrir.ubot.utilities.message.Messages;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Message;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.concurrent.TimeUnit;
 
 public abstract class Command {
 
@@ -40,6 +42,10 @@ public abstract class Command {
 
     public CommandCategory getCategory() {
         return category;
+    }
+
+    protected void deleteCommandMessageAfter(Message message, int delay) {
+        message.delete().queueAfter(delay, TimeUnit.SECONDS);
     }
 
     protected boolean isHelpFlag(CommandEvent event) {

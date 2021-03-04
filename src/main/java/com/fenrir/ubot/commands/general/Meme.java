@@ -13,11 +13,15 @@ import com.fenrir.ubot.utilities.message.Messages;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import net.dv8tion.jda.api.Permission;
 import org.json.JSONException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Collections;
 
 public class Meme extends Command {
+
+    private final Logger log = LoggerFactory.getLogger(Meme.class);
 
     private final SubredditContainer subreddits;
 
@@ -35,7 +39,6 @@ public class Meme extends Command {
 
     @Override
     public void execute(CommandEvent event) {
-        event.getMessage().delete().queue();
 
         if (!CommandVerifier.isCommandCorrect(event, minNumberOfArguments, maxNumberOfArguments, flags)
                 || !PermissionsVerifier.checkPermissions(userRequiredPermissions, botRequiredPermissions, event)
@@ -64,10 +67,12 @@ public class Meme extends Command {
         } catch (ImageException e) {
             Messages.sendEmbedMessage(e.getMessage(), MessageCategory.WARNING, event.getChannel());
         } catch (JSONException | UnirestException e) {
+            log.error(e.getMessage());
+
             Messages.sendEmbedMessage("An error has occurred",
                     MessageCategory.ERROR,
                     event.getChannel(),
-                    30);
+                    60);
         }
     }
 
@@ -76,7 +81,7 @@ public class Meme extends Command {
             Messages.sendEmbedMessage(CommandErrorsMsg.TOO_MUCH_ARGUMENTS,
                     MessageCategory.ERROR,
                     event.getChannel(),
-                    30);
+                    60);
             return null;
         }
 
@@ -88,18 +93,18 @@ public class Meme extends Command {
                 Messages.sendEmbedMessage("Number out of range",
                         MessageCategory.ERROR,
                         event.getChannel(),
-                        30);
+                        60);
             }
         } else if(Utilities.isNumeric(arg)) {
             Messages.sendEmbedMessage("The number should be integer.",
                     MessageCategory.ERROR,
                     event.getChannel(),
-                    30);
+                    60);
         } else if((subreddit = subreddits.getSubreddit(arg)) == null) {
             Messages.sendEmbedMessage("Incorrect name of subreddit",
                     MessageCategory.ERROR,
                     event.getChannel(),
-                    30);
+                    60);
         }
 
         return subreddit;

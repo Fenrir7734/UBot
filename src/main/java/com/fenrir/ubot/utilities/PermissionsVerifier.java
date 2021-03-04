@@ -46,7 +46,7 @@ public class PermissionsVerifier {
 
         if(!member.hasPermission(channel, requiredPermissions)) {
             if(canBotSendMessages(event)) {
-                Messages.sendEmbedMessage(CommandErrorsMsg.BOT_TOO_LOW_PERMISSION, MessageCategory.ERROR, channel);
+                Messages.sendEmbedMessage(CommandErrorsMsg.BOT_TOO_LOW_PERMISSION, MessageCategory.ERROR, channel, 60);
             }
             return false;
         }
@@ -58,7 +58,7 @@ public class PermissionsVerifier {
         TextChannel channel = (TextChannel) event.getChannel();
 
         if(!member.hasPermission(channel, requiredPermissions)) {
-            Messages.sendEmbedMessage(CommandErrorsMsg.USER_TOO_LOW_PERMISSION, MessageCategory.ERROR, channel);
+            Messages.sendEmbedMessage(CommandErrorsMsg.USER_TOO_LOW_PERMISSION, MessageCategory.ERROR, channel, 60);
             return false;
         }
         return true;

@@ -28,17 +28,17 @@ public class Deactivation extends Command {
         }
 
         if (!event.isOwner()) {
-            Messages.sendEmbedMessage(CommandErrorsMsg.ONLY_OWNER, MessageCategory.ERROR, event.getChannel());
+            Messages.sendEmbedMessage(CommandErrorsMsg.ONLY_OWNER, MessageCategory.ERROR, event.getChannel(), 60);
             return;
         }
 
         if (!Config.getConfig().isActive()) {
-            Messages.sendEmbedMessage(Config.getConfig().getBotName() + " has already been deactivated!", MessageCategory.WARNING, event.getChannel());
+            Messages.sendEmbedMessage(Config.getConfig().getBotName() + " has already been deactivated!", MessageCategory.WARNING, event.getChannel(), 60);
             return;
         }
 
         Config.getConfig().setActive(false);
-        Messages.sendEmbedMessage(Config.getConfig().getBotName() + "has been deactivated!", MessageCategory.INFO, event.getChannel());
+        Messages.sendEmbedMessage(Config.getConfig().getBotName() + "has been deactivated!", MessageCategory.INFO, event.getChannel(), 60);
     }
 
     @Override

@@ -10,6 +10,8 @@ import com.fenrir.ubot.utilities.message.Embed;
 import com.fenrir.ubot.utilities.message.MessageCategory;
 import com.fenrir.ubot.utilities.message.Messages;
 
+import java.util.concurrent.TimeUnit;
+
 public class Help extends Command {
 
     public Help() {
@@ -29,13 +31,15 @@ public class Help extends Command {
         if (event.getFlags().length == 0) {
             event.getChannel()
                     .sendMessage(Embed.basicHelpFormatting(CommandList.getCommandList().getCommandsByCategory()))
-                    .queue();
+                    .queue(newMessage -> newMessage.delete()
+                            .queueAfter(2, TimeUnit.MINUTES));
         } else if (event.getFlags()[0].equals("-l") && event.getArgs().length == 0) {
             event.getChannel()
                     .sendMessage(Embed.listHelpFormatting(CommandList.getCommandList().getCommandsByCategory()))
-                    .queue();
+                    .queue(newMessage -> newMessage.delete()
+                            .queueAfter(2, TimeUnit.MINUTES));
         } else if(event.getArgs().length > 0) {
-            Messages.sendEmbedMessage(CommandErrorsMsg.TOO_MUCH_ARGUMENTS, MessageCategory.WARNING, event.getChannel());
+            Messages.sendEmbedMessage(CommandErrorsMsg.TOO_MUCH_ARGUMENTS, MessageCategory.WARNING, event.getChannel(), 60);
         }
     }
 

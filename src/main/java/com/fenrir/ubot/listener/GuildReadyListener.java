@@ -19,6 +19,5 @@ public class GuildReadyListener extends ListenerAdapter {
                 //Messages.sendEmbedMessage(message, MessageCategory.MESSAGE, channel);
             }
         }
-
     }
 }

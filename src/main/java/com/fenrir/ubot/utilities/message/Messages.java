@@ -110,7 +110,7 @@ public class Messages {
         }
 
         if(hasChannelMessageWritePerms && hasGuildMessageWritePerms) {
-            sendMessage(messageToSend, channel, 30);
+            sendMessage(messageToSend, channel, 60);
         } else {
             sendEmbedPrivateMessage(messageToSend, MessageCategory.ERROR, event.getAuthor());
         }

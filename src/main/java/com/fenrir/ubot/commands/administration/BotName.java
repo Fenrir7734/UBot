@@ -1,5 +1,6 @@
 package com.fenrir.ubot.commands.administration;
 
+import com.fenrir.ubot.UBot;
 import com.fenrir.ubot.commands.Command;
 import com.fenrir.ubot.commands.CommandCategory;
 import com.fenrir.ubot.commands.CommandEvent;
@@ -38,21 +39,20 @@ public class BotName extends Command {
 
             if (newName.length() <= 32) {
                 event.getEvent().getJDA()
-                        .getGuildById(event.getEvent().getGuild().getId())
-                        .getMemberById(botId)
-                        .modifyNickname(newName)
+                        .getSelfUser()
+                        .getManager()
+                        .setName(newName)
                         .queue();
                 Config.getConfig().setBotName(newName);
 
-                Messages.sendEmbedMessage("Bot renamed!", MessageCategory.INFO, event.getChannel());
+                Messages.sendEmbedMessage("Bot renamed!", MessageCategory.INFO, event.getChannel(), 60);
             } else {
-                Messages.sendEmbedMessage("Nick name must be 32 or fewer in length.", MessageCategory.ERROR, event.getChannel());
+                Messages.sendEmbedMessage("Nick name must be 32 or fewer in length.", MessageCategory.ERROR, event.getChannel(), 60);
             }
         } catch (NullPointerException e) {
-            String message = "Error: renaming failed. " +
-                    " Cannot find or rename a user with the given name. " +
-                    " Check the log for more details.";
-            Messages.sendEmbedMessage(message, MessageCategory.ERROR, event.getChannel());
+            String message = "Renaming failed. " +
+                    " Cannot find or rename a user with the given name. ";
+            Messages.sendEmbedMessage(message, MessageCategory.ERROR, event.getChannel(), 60);
         }
     }
 

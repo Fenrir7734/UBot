@@ -35,9 +35,9 @@ public class Roll extends Command {
                 seq = getSings(event.getArgs()[0]);
             }
 
-            Messages.sendMessage("You rolled " + Utilities.randomElementFromArray(seq), event.getChannel());
+            Messages.sendMessage("You rolled " + Utilities.randomElementFromArray(seq), event.getChannel(), 60);
         } catch (NullPointerException e) {
-            Messages.sendEmbedMessage(CommandErrorsMsg.INVALID_ARGUMENTS, MessageCategory.ERROR, event.getChannel());
+            Messages.sendEmbedMessage(CommandErrorsMsg.INVALID_ARGUMENTS, MessageCategory.ERROR, event.getChannel(), 60);
         }
     }
 

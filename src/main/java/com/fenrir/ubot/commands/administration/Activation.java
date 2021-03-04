@@ -26,17 +26,17 @@ public class Activation extends Command {
         }
 
         if (!event.isOwner()) {
-            Messages.sendEmbedMessage(CommandErrorsMsg.ONLY_OWNER, MessageCategory.INFO, event.getChannel());
+            Messages.sendEmbedMessage(CommandErrorsMsg.ONLY_OWNER, MessageCategory.INFO, event.getChannel(), 60);
             return;
         }
 
         if (Config.getConfig().isActive()) {
-            Messages.sendEmbedMessage(Config.getConfig().getBotName() + " has already been activated!", MessageCategory.WARNING, event.getChannel());
+            Messages.sendEmbedMessage(Config.getConfig().getBotName() + " has already been activated!", MessageCategory.WARNING, event.getChannel(), 60);
             return;
         }
 
         Config.getConfig().setActive(true);
-        Messages.sendEmbedMessage(Config.getConfig().getBotName() + " has been activated!", MessageCategory.INFO, event.getChannel());
+        Messages.sendEmbedMessage(Config.getConfig().getBotName() + " has been activated!", MessageCategory.INFO, event.getChannel(), 60);
     }
 
     @Override
