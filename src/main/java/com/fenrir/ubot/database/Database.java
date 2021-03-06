@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
@@ -47,8 +46,9 @@ public class Database {
                 .build();
 
     }
-
-    public GuildDB guildDB() {
+//może wyrzycić nulla, trzeba coś z tym zrobić
+    public GuildDB guildDB(String id) throws SQLException {
+        //return guilds.get(id, k -> GuildDB.get(id, connection));
         return null;
     }
 
