@@ -1,9 +1,5 @@
 package com.fenrir.ubot.config;
 
-import com.fenrir.ubot.commands.CommandList;
-import com.fenrir.ubot.commands.administration.Activation;
-import com.fenrir.ubot.commands.administration.BotName;
-import com.fenrir.ubot.commands.administration.Deactivation;
 import net.dv8tion.jda.api.entities.Guild;
 
 import java.awt.*;
@@ -22,7 +18,6 @@ public class GuildSettings {
     private String botName;
 
     private String welcomeChannelID;
-    private String errorChannelID;
     private String modLogChannelID;
 
     private Color messageColor;
@@ -40,7 +35,6 @@ public class GuildSettings {
         botName = Config.getConfig().getBotName();
         active = false;
 
-        errorChannelID = null;
         welcomeChannelID = null;
         modLogChannelID = null;
 
@@ -79,10 +73,6 @@ public class GuildSettings {
 
     public String getWelcomeChannelID() {
         return welcomeChannelID;
-    }
-
-    public String getErrorChannelID() {
-        return errorChannelID;
     }
 
     public String getModLogChannelID() {
@@ -128,7 +118,6 @@ public class GuildSettings {
                 && Objects.equals(prefix, that.prefix)
                 && Objects.equals(botName, that.botName)
                 && Objects.equals(welcomeChannelID, that.welcomeChannelID)
-                && Objects.equals(errorChannelID, that.errorChannelID)
                 && Objects.equals(modLogChannelID, that.modLogChannelID)
                 && Objects.equals(messageColor, that.messageColor)
                 && Objects.equals(infoColor, that.infoColor)
@@ -139,6 +128,6 @@ public class GuildSettings {
 
     @Override
     public int hashCode() {
-        return Objects.hash(guildID, guildName, prefix, active, botName, welcomeChannelID, errorChannelID, modLogChannelID, messageColor, infoColor, helpColor, warningColor, errorColor);
+        return Objects.hash(guildID, guildName, prefix, active, botName, welcomeChannelID, modLogChannelID, messageColor, infoColor, helpColor, warningColor, errorColor);
     }
 }

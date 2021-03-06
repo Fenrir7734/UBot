@@ -15,6 +15,7 @@ import com.fenrir.ubot.commands.administration.BotName;
 import com.fenrir.ubot.commands.administration.Deactivation;
 import com.fenrir.ubot.commands.moderation.Purge;
 import com.fenrir.ubot.config.Config;
+import com.fenrir.ubot.database.Database;
 import com.fenrir.ubot.listener.GuildCommandListener;
 import com.fenrir.ubot.listener.GuildReadyListener;
 import com.fenrir.ubot.listener.PrivateChannelListener;
@@ -26,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class UBot {
 
@@ -33,6 +35,7 @@ public class UBot {
 
     private static JDA client;
     private static CommandList commandList;
+    private static Database database;
     private static Config config;
 
     public static void main(String[] args) {
@@ -48,15 +51,25 @@ public class UBot {
             initCommands();
             bootBot();
 
+            log.info("Starting database initialization process...");
+            database = new Database();
+            log.info("Database initialized successfully.");
+
         } catch (IOException e) {
             log.error("Failed to read the {} file.", "Config.json");
+            System.exit(0);
         } catch (JSONException e) {
             log.error("The configuration file is invalid.");
+            System.exit(0);
+        } catch (SQLException e) {
+            log.error("Stopping the bot");
+            System.exit(0);
         } catch (Exception e) {
             log.error("Something went wrong: {}", e.getMessage());
             log.error("Stopping the bot");
             System.exit(0);
         }
+
         log.info("The bot has been successfully built and is ready to go!");
     }
 
