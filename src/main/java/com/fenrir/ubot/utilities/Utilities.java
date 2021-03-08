@@ -1,5 +1,6 @@
 package com.fenrir.ubot.utilities;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Random;
 
@@ -19,6 +20,10 @@ public class Utilities {
 
     public static boolean isNumeric(String arg) {
         return arg.matches("-?\\d+(\\.\\d+)?");
+    }
+
+    public static String colorToHex(Color color) {
+        return Integer.toHexString(color.getRGB()).substring(2);
     }
 
 }

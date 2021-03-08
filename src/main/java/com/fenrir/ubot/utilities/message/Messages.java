@@ -56,7 +56,6 @@ public class Messages {
                         .queueAfter(2, TimeUnit.MINUTES));
     }
 
-
     public static void sendImage(ImageData imageData, MessageChannel channel) {
         channel.sendMessage(Embed.memeMessage(imageData)).queue();
     }

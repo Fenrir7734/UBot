@@ -3,7 +3,6 @@ package com.fenrir.ubot.database;
 import com.fenrir.ubot.config.Config;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,12 +43,10 @@ public class Database {
                 .expireAfterAccess(5, TimeUnit.MINUTES)
                 .maximumSize(100)
                 .build();
-
     }
-//może wyrzycić nulla, trzeba coś z tym zrobić
-    public GuildDB guildDB(String id) throws SQLException {
-        //return guilds.get(id, k -> GuildDB.get(id, connection));
-        return null;
+
+    public GuildDB guildDB(String id) {
+        return guilds.get(id, k -> GuildDB.get(id, connection));
     }
 
     public UserDB getUser() {

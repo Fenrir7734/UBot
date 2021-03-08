@@ -1,6 +1,7 @@
 package com.fenrir.ubot.database;
 
 import com.fenrir.ubot.config.Config;
+import com.fenrir.ubot.utilities.Utilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +46,8 @@ public class GuildDB {
 
         welcomeChannelID = null;
         logChannelID = null;
+
+        addGuildToDatabase(this, connection);
     }
 
     private GuildDB(ResultSet set) throws SQLException {
@@ -54,24 +57,101 @@ public class GuildDB {
         active = set.getBoolean("active");
         botName = set.getString("bot_name");
 
+        messageColor = Color.decode("#" + set.getString("message_color"));
+        infoColor = Color.decode("#" + set.getString("info_color"));
+        helpColor = Color.decode("#" + set.getString("help_color"));
+        warningColor = Color.decode("#" + set.getString("warning_color"));
+        errorColor = Color.decode("#" + set.getString("error_color"));
+
         welcomeChannelID = set.getString("welcome_channel_id");
         logChannelID = set.getString("log_channel_id");
     }
 
-    public static GuildDB get(String id, Connection connection) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement("SELECT * FROM guild WHERE guild_id = ?");
-        statement.setString(1, id);
-        ResultSet set = statement.executeQuery();
+    public static GuildDB get(String id, Connection connection) {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM guild WHERE guild_id = ?")) {
 
-        if(!set.next()) {
-            return new GuildDB(id, connection);
-        } else {
-            return new GuildDB(set);
+            statement.setString(1, id);
+            ResultSet set = statement.executeQuery();
+
+            if(!set.next()) {
+                return new GuildDB(id, connection);
+            } else {
+                return new GuildDB(set);
+            }
+        } catch (SQLException e) {
+            logger.error("An error occurred while fetching guild from database. Guild id: {}", id);
+            return null;
         }
+    }
+
+    private boolean addGuildToDatabase(GuildDB guildDB, Connection connection) {
+        try (PreparedStatement statement = connection.prepareStatement("" +
+                "INSERT INTO guild (guild_id, prefix, bot_name, active, welcome_channel_id, log_channel_id, message_color, info_color, help_color, warning_color, error_color) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,?)")) {
+
+
+            statement.setString(1, guildDB.getGuildID());
+            statement.setString(2, guildDB.getPrefix());
+            statement.setString(3, guildDB.getBotName());
+            statement.setBoolean(4, guildDB.isActive());
+            statement.setString(5, guildDB.getWelcomeChannelID());
+            statement.setString(6, guildDB.getLogChannelID());
+            statement.setString(7, Utilities.colorToHex(guildDB.getMessageColor()));
+            statement.setString(8, Utilities.colorToHex(guildDB.getInfoColor()));
+            statement.setString(9, Utilities.colorToHex(guildDB.getHelpColor()));
+            statement.setString(10, Utilities.colorToHex(guildDB.getWarningColor()));
+            statement.setString(11, Utilities.colorToHex(guildDB.getErrorColor()));
+
+            return statement.execute();
+        } catch (SQLException e) {
+            logger.error("An error occurred while inserting guild to database. {}", e.getMessage());
+        }
+
+        return false;
+    }
+
+    public static GuildDB add(String id, Connection connection) {
+        return new GuildDB(id, connection);
+    }
+
+    public void updateValue(String column, String value, Connection connection) {
+        try (PreparedStatement statement = connection.prepareStatement("UPDATE guild " +
+                "SET ? = ?" +
+                "WHERE guild_id = ?")) {
+
+            statement.setString(1, column);
+            statement.setString(2, value);
+            statement.setString(3, this.guildID);
+            statement.execute();
+        } catch (SQLException e) {
+            logger.error("An error occurred while updating guild table: column: {}, value: {}", column, value);
+        }
+    }
+
+    public void updateValue(String column, Boolean value, Connection connection) {
+        try (PreparedStatement statement = connection.prepareStatement("UPDATE guild " +
+                "SET ? = ?" +
+                "WHERE guild_id = ?")) {
+
+            statement.setString(1, column);
+            statement.setBoolean(2, value);
+            statement.setString(3, this.guildID);
+            statement.execute();
+        } catch (SQLException e) {
+            logger.error("An error occurred while updating guild table: column: {}, value: {}", column, value);
+        }
+    }
+
+    public String getGuildID() {
+        return guildID;
     }
 
     public String getPrefix() {
         return prefix;
+    }
+
+    public boolean isActive() {
+        return active;
     }
 
     public String getBotName() {
